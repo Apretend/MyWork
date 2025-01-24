@@ -183,22 +183,31 @@
                 class="content-textarea"
                 @input="handleContentChange"
               ></el-input>
-              
-              <!-- 修改统计信息显示位置 -->
-              <div class="content-stats">
-                <div class="stat-item">
-                  <span class="stat-label">当前字数：</span>
-                  <span class="stat-value">{{ wordCount }}</span>
-                </div>
-                <div class="stat-item" v-if="startTime">
-                  <span class="stat-label">开始时间：</span>
-                  <span class="stat-value">{{ formatTime(startTime) }}</span>
-                </div>
-                <div class="stat-item" v-if="endTime">
-                  <span class="stat-label">结束时间：</span>
-                  <span class="stat-value">{{ formatTime(endTime) }}</span>
-                </div>
+            </div>
+            
+            <!-- 右侧统计信息 -->
+            <div class="content-stats">
+              <div class="stat-item">
+                <span class="stat-label">当前字数：</span>
+                <span class="stat-value">{{ wordCount }}</span>
               </div>
+              <div class="stat-item" v-if="startTime">
+                <span class="stat-label">开始时间：</span>
+                <span class="stat-value">{{ formatTime(startTime) }}</span>
+              </div>
+              <div class="stat-item" v-if="endTime">
+                <span class="stat-label">结束时间：</span>
+                <span class="stat-value">{{ formatTime(endTime) }}</span>
+              </div>
+              <!-- 添加保存按钮 -->
+              <el-button 
+                type="primary" 
+                @click="saveContent"
+                :loading="isSaving"
+                class="save-content-btn"
+              >
+                保存内容
+              </el-button>
             </div>
           </div>
         </div>
@@ -221,6 +230,27 @@
             @click="switchTab('outline')"
           >
             细纲
+          </div>
+          <div 
+            class="tab"
+            :class="{ 'active': activeTab === 'book' }"
+            @click="switchTab('book')"
+          >
+            本书
+          </div>
+          <div 
+            class="tab"
+            :class="{ 'active': activeTab === 'library' }"
+            @click="switchTab('library')"
+          >
+            书库
+          </div>
+          <div 
+            class="tab"
+            :class="{ 'active': activeTab === 'newBook' }"
+            @click="switchTab('newBook')"
+          >
+            创建新书
           </div>
         </div>
 
@@ -289,6 +319,268 @@
             :rows="25"
             placeholder="请输入细纲内容..."
           ></el-input>
+        </div>
+
+        <!-- 修改本书信息区域的结构 -->
+        <div v-show="activeTab === 'book'" class="tab-content book-info">
+          <!-- 书名部分 -->
+          <div class="book-section">
+            <div class="section-title book-title">书名</div>
+            <div class="book-titles">
+              <div 
+                v-for="(title, index) in bookTitleList" 
+                :key="index"
+                class="title-item"
+              >
+                <el-input
+                  v-model="title.value"
+                  placeholder="请输入书名"
+                  maxlength="20"
+                  :style="{ width: '240px' }"
+                ></el-input>
+                <i 
+                  v-if="bookTitleList.length > 1"
+                  class="el-icon-delete"
+                  @click="removeBookTitle(index)"
+                ></i>
+              </div>
+            </div>
+            <el-button 
+              type="text" 
+              icon="el-icon-plus"
+              class="add-title-btn"
+              @click="addBookTitle"
+              :disabled="bookTitleList.length >= 5"
+            >
+              添加书名
+            </el-button>
+          </div>
+
+          <!-- 简介部分 -->
+          <div class="book-section">
+            <div class="section-title">简介</div>
+            <div class="input-wrapper">
+              <el-input
+                type="textarea"
+                v-model="bookIntro"
+                :rows="4"
+                show-word-limit
+                maxlength="500"
+                placeholder="请输入书籍简介"
+              ></el-input>
+            </div>
+          </div>
+
+          <!-- 故事大纲部分 -->
+          <div class="book-section">
+            <div class="section-title required">故事大纲</div>
+            <div class="input-wrapper">
+              <el-input
+                type="textarea"
+                v-model="bookStory"
+                :rows="6"
+                placeholder="请输入故事大纲"
+              ></el-input>
+              <span class="word-count">大纲字数：{{ bookStory.length }}</span>
+            </div>
+          </div>
+
+          <!-- 封面部分 -->
+          <div class="book-section">
+            <div class="section-title">封面</div>
+            <el-upload
+              action="#"
+              list-type="picture-card"
+              :auto-upload="false"
+              :file-list="fileList"
+              @remove="handleRemove"
+              @preview="handlePictureCardPreview"
+            >
+              <i slot="default" class="el-icon-plus"></i>
+              <div slot="file" slot-scope="{file}">
+                <img
+                  class="el-upload-list__item-thumbnail"
+                  :src="file.url" 
+                  alt=""
+                >
+                <span class="el-upload-list__item-actions">
+                  <span
+                    class="el-upload-list__item-preview"
+                    @click="handlePictureCardPreview(file)"
+                  >
+                    <i class="el-icon-zoom-in"></i>
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleDownload(file)"
+                  >
+                    <i class="el-icon-download"></i>
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleRemove(file)"
+                  >
+                    <i class="el-icon-delete"></i>
+                  </span>
+                </span>
+              </div>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
+          </div>
+
+          <!-- 添加保存按钮 -->
+          <div class="form-actions">
+            <el-button type="primary" @click="saveBookInfo">保存</el-button>
+          </div>
+        </div>
+
+        <!-- 修改书库区域 -->
+        <div v-show="activeTab === 'library'" class="tab-content library-content">
+          <!-- 搜索框 -->
+          <div class="library-search">
+            <el-input
+              v-model="librarySearchQuery"
+              placeholder="搜索书名或简介..."
+              prefix-icon="el-icon-search"
+              clearable
+              @input="handleLibrarySearch"
+            ></el-input>
+          </div>
+
+          <!-- 书籍列表 -->
+          <div class="library-list">
+            <div 
+              v-for="book in filteredLibraryBooks" 
+              :key="book.id"
+              class="library-book-item"
+              @click="switchToBook(book)"
+            >
+              <div class="book-item-header">
+                <span class="book-name">{{ book.title }}</span>
+                <span class="chapter-count">共 {{ book.chapterCount }} 章</span>
+              </div>
+              <div class="book-intro">{{ book.intro }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 修改创建新书区域 -->
+        <div v-show="activeTab === 'newBook'" class="tab-content book-info">
+          <!-- 书名部分 -->
+          <div class="book-section">
+            <div class="section-title book-title">书名</div>
+            <div class="book-titles">
+              <div 
+                v-for="(title, index) in newBookTitles" 
+                :key="index"
+                class="title-item"
+              >
+                <el-input
+                  v-model="title.value"
+                  placeholder="请输入书名"
+                  maxlength="20"
+                  :style="{ width: '240px' }"
+                ></el-input>
+                <i 
+                  v-if="newBookTitles.length > 1"
+                  class="el-icon-delete"
+                  @click="removeNewBookTitle(index)"
+                ></i>
+              </div>
+            </div>
+            <el-button 
+              type="text" 
+              icon="el-icon-plus"
+              class="add-title-btn"
+              @click="addNewBookTitle"
+              :disabled="newBookTitles.length >= 5"
+            >
+              添加书名
+            </el-button>
+          </div>
+
+          <!-- 简介部分 -->
+          <div class="book-section">
+            <div class="section-title">简介</div>
+            <div class="input-wrapper">
+              <el-input
+                type="textarea"
+                v-model="newBookIntro"
+                :rows="4"
+                show-word-limit
+                maxlength="500"
+                placeholder="请输入书籍简介"
+              ></el-input>
+            </div>
+          </div>
+
+          <!-- 故事大纲部分 -->
+          <div class="book-section">
+            <div class="section-title required">故事大纲</div>
+            <div class="input-wrapper">
+              <el-input
+                type="textarea"
+                v-model="newBookStory"
+                :rows="6"
+                placeholder="请输入故事大纲"
+              ></el-input>
+              <span class="word-count">大纲字数：{{ newBookStory.length }}</span>
+            </div>
+          </div>
+
+          <!-- 封面部分 -->
+          <div class="book-section">
+            <div class="section-title">封面</div>
+            <el-upload
+              action="#"
+              list-type="picture-card"
+              :auto-upload="false"
+              :file-list="newBookFileList"
+              @remove="handleNewBookRemove"
+              @preview="handlePictureCardPreview"
+            >
+              <i slot="default" class="el-icon-plus"></i>
+              <div slot="file" slot-scope="{file}">
+                <img
+                  class="el-upload-list__item-thumbnail"
+                  :src="file.url" 
+                  alt=""
+                >
+                <span class="el-upload-list__item-actions">
+                  <span
+                    class="el-upload-list__item-preview"
+                    @click="handlePictureCardPreview(file)"
+                  >
+                    <i class="el-icon-zoom-in"></i>
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleDownload(file)"
+                  >
+                    <i class="el-icon-download"></i>
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleNewBookRemove(file)"
+                  >
+                    <i class="el-icon-delete"></i>
+                  </span>
+                </span>
+              </div>
+            </el-upload>
+          </div>
+
+          <!-- 操作按钮 -->
+          <div class="form-actions">
+            <el-button @click="cancelNewBook">取消</el-button>
+            <el-button type="primary" @click="saveNewBook">保存</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -451,7 +743,60 @@ export default {
       },
       searchKeywords: {},
       activeTab: 'resource',
-      outlineContent: ''
+      outlineContent: '',
+      bookTitleList: [
+        { value: '稿费起飞从搭建工具开始' }
+      ],
+      bookCover: '',
+      bookIntro: '',
+      bookStory: '',
+      libraryBooks: [
+        {
+          id: 1,
+          title: '稿费起飞从搭建工具开始',
+          chapterCount: 23,
+          intro: '这是一个关于程序员如何通过开发工具实现稿费收入突飞猛进的故事，主人公通过自己的努力和天赋，开发出了一款深受用户喜爱的写作工具...'
+        },
+        {
+          id: 2,
+          title: '重生之科技巨头',
+          chapterCount: 45,
+          intro: '一位互联网公司的普通程序员意外重生到了20年前，凭借对未来科技发展的了解，开启了一段传奇之路，从零开始打造属于自己的科技帝国。'
+        },
+        {
+          id: 3,
+          title: '修仙从写代码开始',
+          chapterCount: 67,
+          intro: '程序员王小明发现自己写的代码竟然能产生法力，一行行代码编织出神奇的法术，用程序员的方式在修仙界掀起一场革命。'
+        },
+        {
+          id: 4,
+          title: '全球编程之王',
+          chapterCount: 89,
+          intro: '在一个编程就是一切的世界里，主角凭借着对代码的极致理解和创新思维，在全球编程竞赛中不断创造奇迹，最终成为传说中的编程之王。'
+        },
+        {
+          id: 5,
+          title: 'AI时代的旅行者',
+          chapterCount: 34,
+          intro: '在人工智能全面普及的未来世界，一位极客少年意外获得了一段神秘代码，由此揭开了AI背后不为人知的秘密。'
+        }
+      ],
+      newBookData: {
+        title: '',
+        subTitles: ['', '']
+      },
+      dialogVisible: false,
+      dialogImageUrl: '',
+      disabled: false,
+      fileList: [],
+      newBookTitles: [
+        { value: '' }
+      ],
+      newBookIntro: '',
+      newBookStory: '',
+      newBookFileList: [],
+      librarySearchQuery: '',
     }
   },
   computed: {
@@ -464,6 +809,16 @@ export default {
     formTitle() {
       const currentType = this.itemTypes.find(item => item.type === this.showItemFormType)
       return currentType ? currentType.label : ''
+    },
+    filteredLibraryBooks() {
+      if (!this.librarySearchQuery) {
+        return this.libraryBooks
+      }
+      const query = this.librarySearchQuery.toLowerCase()
+      return this.libraryBooks.filter(book => 
+        book.title.toLowerCase().includes(query) ||
+        book.intro.toLowerCase().includes(query)
+      )
     }
   },
   methods: {
@@ -750,7 +1105,72 @@ export default {
     },
     switchTab(tab) {
       this.activeTab = tab
-    }
+    },
+    removeBookTitle(index) {
+      if (this.bookTitleList.length > 1) {  // 确保至少保留一个书名
+        this.bookTitleList.splice(index, 1)
+      }
+    },
+    addBookTitle() {
+      if (this.bookTitleList.length < 5) {
+        this.bookTitleList.push({ value: '' })
+      }
+    },
+    beforeCoverUpload(file) {
+      // 处理封面上传逻辑
+    },
+    cancelNewBook() {
+      // 取消新书创建逻辑
+    },
+    saveNewBook() {
+      // 保存新书创建逻辑
+    },
+    handleRemove(file) {
+      // 处理图片移除逻辑
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
+    },
+    handleDownload(file) {
+      // 处理下载逻辑
+    },
+    removeNewBookTitle(index) {
+      if (this.newBookTitles.length > 1) {  // 确保至少保留一个书名
+        this.newBookTitles.splice(index, 1)
+      }
+    },
+    addNewBookTitle() {
+      if (this.newBookTitles.length < 5) {
+        this.newBookTitles.push({ value: '' })
+      }
+    },
+    handleNewBookRemove(file) {
+      // 处理新书图片移除逻辑
+    },
+    saveBookInfo() {
+      // 验证必填项
+      if (!this.bookTitleList[0].value.trim()) {
+        this.$message.error('请输入主书名')
+        return
+      }
+      if (!this.bookStory.trim()) {
+        this.$message.error('请输入故事大纲')
+        return
+      }
+
+      // TODO: 调用保存接口
+      this.$message.success('保存成功')
+    },
+    handleLibrarySearch() {
+      // 实现搜索逻辑
+    },
+    switchToBook(book) {
+      // 实现切换到指定书籍的逻辑
+    },
+    saveContent() {
+      // 实现保存内容逻辑
+    },
   }
 }
 </script>
@@ -1097,7 +1517,7 @@ export default {
   background: transparent;
 }
 
-/* 统计信息显示样式 */
+/* 修改统计信息显示样式 */
 .content-stats {
   width: 140px;
   flex-shrink: 0;
@@ -1107,7 +1527,7 @@ export default {
   background: #fff;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  height: 100%;  /* 确保占满整个高度 */
 }
 
 .stat-item {
@@ -1116,15 +1536,10 @@ export default {
   gap: 4px;
 }
 
-.stat-label {
-  font-size: 12px;
-  color: #909399;
-}
-
-.stat-value {
-  font-size: 14px;
-  color: #303133;
-  font-family: monospace;
+/* 添加保存按钮样式 */
+.save-content-btn {
+  margin-top: auto;  /* 将按钮推到底部 */
+  width: 100%;      /* 按钮宽度占满 */
 }
 
 .logout-btn {
@@ -1328,5 +1743,216 @@ export default {
   overflow-y: auto;
   padding: 16px;
   background: #fff;
+}
+
+.book-titles {
+  margin-bottom: 6px;  /* 书名输入框列表的底部间距 */
+}
+
+.title-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;  /* 每个书名输入框的底部间距 */
+}
+
+.title-item:last-child {
+  margin-bottom: 0;  /* 最后一个输入框不需要底部间距 */
+}
+
+.book-section .el-textarea {
+  margin-bottom: 16px;  /* 文本域的底部间距 */
+}
+
+.cover-uploader {
+  margin-bottom: 16px;  /* 封面上传控件的底部间距 */
+}
+
+/* 最后一个区块的最后一个元素不需要底部间距 */
+.book-section:last-child > *:last-child {
+  margin-bottom: 0;
+}
+
+.book-section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 500;
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #606266;
+  margin-bottom: 8px;  /* 标题和控件的间距 */
+  user-select: none;   /* 防止文本选择 */
+  cursor: default;     /* 使用默认光标 */
+}
+.section-title.book-title {
+  margin-bottom: 12px;
+}
+
+.section-title.required::after {
+  content: '*';
+  color: #f56c6c;
+  margin-left: 4px;
+}
+
+.book-intro {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #606266;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;  /* 限制显示两行 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;  /* 设置行高 */
+  max-height: 36px;  /* 2行文字的最大高度：12px * 1.5 * 2 = 36px */
+}
+
+.book-story {
+  margin-bottom: 20px;
+}
+
+.book-info {
+  padding: 20px;
+}
+
+.library-content {
+  padding: 20px;
+}
+
+.library-book-item {
+  margin-bottom: 10px;
+}
+
+.book-main-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #303133;
+}
+
+.book-sub-titles {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #909399;
+}
+
+.new-book-content {
+  padding: 20px;
+}
+
+.form-actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 修改输入框和文本域的样式 */
+.title-item .el-input {
+  user-select: text;  /* 允许文本选择 */
+}
+
+.title-item .el-input__inner {
+  user-select: text;  /* 允许文本选择 */
+  cursor: text;       /* 显示文本光标 */
+}
+
+.title-item .el-input__wrapper {
+  user-select: none;  /* 防止外层被选中 */
+  cursor: default;    /* 使用默认光标 */
+}
+
+.input-wrapper {
+  position: relative;
+  user-select: none;  /* 防止外层被选中 */
+  cursor: default;    /* 使用默认光标 */
+}
+
+.input-wrapper .el-textarea {
+  user-select: text;  /* 允许文本选择 */
+}
+
+.input-wrapper .el-textarea__inner {
+  user-select: text;  /* 允许文本选择 */
+  cursor: text;       /* 显示文本光标 */
+}
+
+/* 确保文字计数器不可选 */
+.word-count {
+  user-select: none;
+  cursor: default;
+}
+
+/* 确保标题不可选 */
+.section-title {
+  user-select: none;
+  cursor: default;
+}
+
+/* 修改表单操作区样式 */
+.form-actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 确保最后一个 book-section 和 form-actions 之间有正确的间距 */
+.book-section:last-of-type {
+  margin-bottom: 0;
+}
+
+/* 修改书库区域样式 */
+.library-search {
+  padding: 16px;
+  border-bottom: 1px solid #e4e7ed;
+}
+
+.library-list {
+  padding: 16px;
+}
+
+.library-book-item {
+  padding: 12px;
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;  /* 添加过渡效果 */
+}
+
+.library-book-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.book-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.book-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #303133;
+}
+
+.chapter-count {
+  font-size: 12px;
+  color: #909399;
+}
+
+.book-intro {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #606266;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;  /* 限制显示两行 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;  /* 设置行高 */
+  max-height: 36px;  /* 2行文字的最大高度：12px * 1.5 * 2 = 36px */
 }
 </style> 
