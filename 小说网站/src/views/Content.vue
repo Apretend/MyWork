@@ -111,43 +111,150 @@
           <!-- 条目表单 -->
           <div v-show="showItemFormType" class="item-form">
             <h3 class="form-title">{{ formTitle }}</h3>
-            <el-form :model="itemForm" label-width="60px">
-              <el-form-item label="名称">
-                <el-input v-model="itemForm.name" placeholder="请输入名称"></el-input>
+            
+            <!-- 人物表单 -->
+            <el-form v-if="showItemFormType === 'character'" :model="characterForm" label-width="80px">
+              <el-form-item label="姓名" required>
+                <el-input v-model="characterForm.name" placeholder="请输入姓名"></el-input>
               </el-form-item>
-              <el-form-item label="性别">
-                <el-input v-model="itemForm.gender" placeholder="请输入性别"></el-input>
+              <el-form-item label="性别" required>
+                <el-select v-model="characterForm.gender" placeholder="请选择性别">
+                  <el-option label="男" value="男"></el-option>
+                  <el-option label="女" value="女"></el-option>
+                  <el-option label="其他" value="其他"></el-option>
+                </el-select>
               </el-form-item>
-              <el-form-item label="年龄">
-                <el-input-number 
-                  v-model="itemForm.age" 
-                  :min="0"
-                  controls-position="right"
-                ></el-input-number>
+              <el-form-item label="年龄" required>
+                <el-input-number v-model="characterForm.age" :min="0"></el-input-number>
               </el-form-item>
-              <el-form-item label="性格">
-                <el-input v-model="itemForm.personality" placeholder="请输入性格特点"></el-input>
+              <el-form-item label="性格" required>
+                <el-input type="textarea" v-model="characterForm.personality" :rows="2"></el-input>
               </el-form-item>
-              <el-form-item label="描述">
-                <el-input
-                  type="textarea"
-                  v-model="itemForm.description"
-                  :rows="2"
-                  placeholder="请输入描述"
-                ></el-input>
+              <el-form-item label="人设描述" required>
+                <el-input type="textarea" v-model="characterForm.description" :rows="3"></el-input>
               </el-form-item>
-              <el-form-item label="数量">
-                <el-input-number 
-                  v-model="itemForm.quantity" 
-                  :min="0"
-                  controls-position="right"
-                ></el-input-number>
+              <el-form-item label="背景故事" required>
+                <el-input type="textarea" v-model="characterForm.background" :rows="4"></el-input>
               </el-form-item>
-              <el-form-item class="form-buttons">
-                <el-button @click="cancelEdit">取消</el-button>
-                <el-button type="primary" @click="saveItem">保存</el-button>
+              <el-form-item label="实力" required>
+                <el-input v-model="characterForm.strength"></el-input>
+              </el-form-item>
+              <el-form-item label="存活状态">
+                <el-switch v-model="characterForm.isAlive"></el-switch>
               </el-form-item>
             </el-form>
+
+            <!-- 地点表单 -->
+            <el-form v-if="showItemFormType === 'location'" :model="locationForm" label-width="80px">
+              <el-form-item label="地点名称" required>
+                <el-input v-model="locationForm.name" placeholder="请输入地点名称"></el-input>
+              </el-form-item>
+              <el-form-item label="地点类型" required>
+                <el-input v-model="locationForm.type" placeholder="请输入地点类型"></el-input>
+              </el-form-item>
+              <el-form-item label="地点特色" required>
+                <el-input type="textarea" v-model="locationForm.feature" :rows="3"></el-input>
+              </el-form-item>
+              <el-form-item label="地点位置" required>
+                <el-input v-model="locationForm.position"></el-input>
+              </el-form-item>
+              <el-form-item label="地点描述" required>
+                <el-input type="textarea" v-model="locationForm.description" :rows="4"></el-input>
+              </el-form-item>
+            </el-form>
+
+            <!-- 武器表单 -->
+            <el-form v-if="showItemFormType === 'weapon'" :model="weaponForm" label-width="80px">
+              <el-form-item label="武器名称" required>
+                <el-input v-model="weaponForm.name" placeholder="请输入武器名称"></el-input>
+              </el-form-item>
+              <el-form-item label="武器类型" required>
+                <el-input v-model="weaponForm.type" placeholder="请输入武器类型"></el-input>
+              </el-form-item>
+              <el-form-item label="武器主人">
+                <el-input v-model="weaponForm.owner" placeholder="请输入武器主人"></el-input>
+              </el-form-item>
+              <el-form-item label="武器威力" required>
+                <el-input v-model="weaponForm.power"></el-input>
+              </el-form-item>
+              <el-form-item label="武器来源" required>
+                <el-input v-model="weaponForm.origin"></el-input>
+              </el-form-item>
+              <el-form-item label="武器描述" required>
+                <el-input type="textarea" v-model="weaponForm.description" :rows="4"></el-input>
+              </el-form-item>
+            </el-form>
+
+            <!-- 装备表单 -->
+            <el-form v-if="showItemFormType === 'equipment'" :model="equipmentForm" label-width="80px">
+              <el-form-item label="装备名称" required>
+                <el-input v-model="equipmentForm.name" placeholder="请输入装备名称"></el-input>
+              </el-form-item>
+              <el-form-item label="装备类型" required>
+                <el-input v-model="equipmentForm.type" placeholder="请输入装备类型"></el-input>
+              </el-form-item>
+              <el-form-item label="装备主人">
+                <el-input v-model="equipmentForm.owner" placeholder="请输入装备主人"></el-input>
+              </el-form-item>
+              <el-form-item label="装备效果" required>
+                <el-input v-model="equipmentForm.effect"></el-input>
+              </el-form-item>
+              <el-form-item label="装备来源" required>
+                <el-input v-model="equipmentForm.origin"></el-input>
+              </el-form-item>
+              <el-form-item label="装备描述" required>
+                <el-input type="textarea" v-model="equipmentForm.description" :rows="4"></el-input>
+              </el-form-item>
+            </el-form>
+
+            <!-- 丹药表单 -->
+            <el-form v-if="showItemFormType === 'elixir'" :model="elixirForm" label-width="80px">
+              <el-form-item label="丹药名称" required>
+                <el-input v-model="elixirForm.name" placeholder="请输入丹药名称"></el-input>
+              </el-form-item>
+              <el-form-item label="丹药类型" required>
+                <el-input v-model="elixirForm.type" placeholder="请输入丹药类型"></el-input>
+              </el-form-item>
+              <el-form-item label="丹药效果" required>
+                <el-input type="textarea" v-model="elixirForm.effect" :rows="3"></el-input>
+              </el-form-item>
+              <el-form-item label="丹药来源" required>
+                <el-input v-model="elixirForm.origin"></el-input>
+              </el-form-item>
+              <el-form-item label="重要原料" required>
+                <el-input v-model="elixirForm.keyIngredient"></el-input>
+              </el-form-item>
+              <el-form-item label="丹药描述" required>
+                <el-input type="textarea" v-model="elixirForm.description" :rows="4"></el-input>
+              </el-form-item>
+            </el-form>
+
+            <!-- 功法表单 -->
+            <el-form v-if="showItemFormType === 'gongfa'" :model="gongfaForm" label-width="80px">
+              <el-form-item label="功法名称" required>
+                <el-input v-model="gongfaForm.name" placeholder="请输入功法名称"></el-input>
+              </el-form-item>
+              <el-form-item label="功法类型" required>
+                <el-input v-model="gongfaForm.type" placeholder="请输入功法类型"></el-input>
+              </el-form-item>
+              <el-form-item label="功法主人">
+                <el-input v-model="gongfaForm.owner" placeholder="请输入功法主人"></el-input>
+              </el-form-item>
+              <el-form-item label="功法效果" required>
+                <el-input v-model="gongfaForm.effect"></el-input>
+              </el-form-item>
+              <el-form-item label="功法来源" required>
+                <el-input v-model="gongfaForm.origin"></el-input>
+              </el-form-item>
+              <el-form-item label="功法描述" required>
+                <el-input type="textarea" v-model="gongfaForm.description" :rows="4"></el-input>
+              </el-form-item>
+            </el-form>
+
+            <div class="form-actions">
+              <el-button @click="cancelEdit">取消</el-button>
+              <el-button type="primary" @click="saveItem">保存</el-button>
+            </div>
           </div>
         </div>
       </div>
@@ -671,20 +778,60 @@ export default {
       itemTypes: [
         { type: 'character', label: '人物' },
         { type: 'location', label: '地点' },
-        { type: 'activity', label: '活动' },
-        { type: 'skill', label: '功法' },
-        { type: 'medicine', label: '丹药' },
         { type: 'weapon', label: '武器' },
-        { type: 'equipment', label: '装备' }
+        { type: 'equipment', label: '装备' },
+        { type: 'elixir', label: '丹药' },
+        { type: 'gongfa', label: '功法' },
       ],
       showItemFormType: '',
-      itemForm: {
+      characterForm: {
         name: '',
         gender: '',
         age: 0,
         personality: '',
         description: '',
-        quantity: 0
+        background: '',
+        strength: '',
+        isAlive: true
+      },
+      locationForm: {
+        name: '',
+        type: '',
+        feature: '',
+        position: '',
+        description: ''
+      },
+      weaponForm: {
+        name: '',
+        type: '',
+        owner: '',
+        power: '',
+        origin: '',
+        description: ''
+      },
+      equipmentForm: {
+        name: '',
+        type: '',
+        owner: '',
+        effect: '',
+        origin: '',
+        description: ''
+      },
+      elixirForm: {
+        name: '',
+        type: '',
+        effect: '',
+        origin: '',
+        keyIngredient: '',
+        description: ''
+      },
+      gongfaForm: {
+        name: '',
+        type: '',
+        owner: '',
+        effect: '',
+        origin: '',
+        description: ''
       },
       content: '',
       isEditingTitle: false,
@@ -969,19 +1116,60 @@ export default {
     },
     showItemForm(type) {
       this.showItemFormType = type
-      this.itemForm = {
+      this.characterForm = {
         name: '',
         gender: '',
         age: 0,
         personality: '',
         description: '',
-        quantity: 0
+        background: '',
+        strength: '',
+        isAlive: true
+      }
+      this.locationForm = {
+        name: '',
+        type: '',
+        feature: '',
+        position: '',
+        description: ''
+      }
+      this.weaponForm = {
+        name: '',
+        type: '',
+        owner: '',
+        power: '',
+        origin: '',
+        description: ''
+      }
+      this.equipmentForm = {
+        name: '',
+        type: '',
+        owner: '',
+        effect: '',
+        origin: '',
+        description: ''
+      }
+      this.elixirForm = {
+        name: '',
+        type: '',
+        effect: '',
+        origin: '',
+        keyIngredient: '',
+        description: ''
+      }
+      this.gongfaForm = {
+        name: '',
+        type: '',
+        owner: '',
+        effect: '',
+        origin: '',
+        description: ''
       }
     },
     saveItem() {
       console.log('保存条目:', {
         type: this.showItemFormType,
-        ...this.itemForm
+        ...this[`${this.showItemFormType}Form`]
       })
       this.showItemFormType = ''
     },
@@ -1425,11 +1613,10 @@ export default {
   text-align: center;
 }
 
-.form-buttons {
+.form-actions {
   margin-top: 24px;
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
 }
 
 /* 调整滚动条样式 */

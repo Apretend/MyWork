@@ -11,7 +11,7 @@
  Target Server Version : 80041 (8.0.41)
  File Encoding         : 65001
 
- Date: 24/01/2025 18:25:32
+ Date: 26/01/2025 18:27:45
 */
 
 SET NAMES utf8mb4;
@@ -22,7 +22,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `book_details`;
 CREATE TABLE `book_details`  (
-  `book_id` int NOT NULL COMMENT '书ID，主键',
+  `book_id` int NOT NULL AUTO_INCREMENT COMMENT '书ID，主键',
   `book_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '书名',
   `alternate_name_1` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备用书名1',
   `alternate_name_2` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备用书名2',
@@ -31,20 +31,33 @@ CREATE TABLE `book_details`  (
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '简介',
   `cover_link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '封面图片链接',
   `platform_id` int NOT NULL COMMENT '平台ID',
-  `is_published` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否发布',
+  `is_published` int NOT NULL DEFAULT 0 COMMENT '是否发布(1：发布，0：未发布)',
   `user_id` int NOT NULL COMMENT '用户ID',
   `book_content_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '故事大纲',
   PRIMARY KEY (`book_id`) USING BTREE,
   INDEX `user_id`(`user_id` ASC) USING BTREE,
   CONSTRAINT `book_details_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '书详细信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '书详细信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for book_resource
+-- ----------------------------
+DROP TABLE IF EXISTS `book_resource`;
+CREATE TABLE `book_resource`  (
+  `book_id` int NOT NULL COMMENT '书ID',
+  `resource_id` int NOT NULL COMMENT '资源ID',
+  PRIMARY KEY (`book_id`, `resource_id`) USING BTREE,
+  INDEX `resource_id`(`resource_id` ASC) USING BTREE,
+  CONSTRAINT `book_resource_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `book_resource_ibfk_2` FOREIGN KEY (`resource_id`) REFERENCES `resource` (`resource_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '书资源关联表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for character_resource
 -- ----------------------------
 DROP TABLE IF EXISTS `character_resource`;
 CREATE TABLE `character_resource`  (
-  `character_id` int NOT NULL COMMENT '人物ID，主键',
+  `character_id` int NOT NULL AUTO_INCREMENT COMMENT '人物ID，主键',
   `book_id` int NOT NULL COMMENT '书ID',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '姓名',
   `gender` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '性别',
@@ -57,28 +70,28 @@ CREATE TABLE `character_resource`  (
   PRIMARY KEY (`character_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `character_resource_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '人物资源表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '人物资源表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for document
 -- ----------------------------
 DROP TABLE IF EXISTS `document`;
 CREATE TABLE `document`  (
-  `document_id` int NOT NULL COMMENT '文档ID，主键',
+  `document_id` int NOT NULL AUTO_INCREMENT COMMENT '文档ID，主键',
   `document_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '文档名称',
   `directory_id` int NOT NULL COMMENT '目录ID',
   `document_content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '文档内容',
   PRIMARY KEY (`document_id`) USING BTREE,
   INDEX `directory_id`(`directory_id` ASC) USING BTREE,
   CONSTRAINT `document_ibfk_1` FOREIGN KEY (`directory_id`) REFERENCES `file_directory` (`directory_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文档表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文档表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for elixir
 -- ----------------------------
 DROP TABLE IF EXISTS `elixir`;
 CREATE TABLE `elixir`  (
-  `elixir_id` int NOT NULL COMMENT '丹药ID，主键',
+  `elixir_id` int NOT NULL AUTO_INCREMENT COMMENT '丹药ID，主键',
   `book_id` int NOT NULL COMMENT '书ID',
   `elixir_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '丹药名称',
   `elixir_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '丹药类型',
@@ -89,14 +102,14 @@ CREATE TABLE `elixir`  (
   PRIMARY KEY (`elixir_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `elixir_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '丹药表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '丹药表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for equipment
 -- ----------------------------
 DROP TABLE IF EXISTS `equipment`;
 CREATE TABLE `equipment`  (
-  `equipment_id` int NOT NULL COMMENT '装备ID，主键',
+  `equipment_id` int NOT NULL AUTO_INCREMENT COMMENT '装备ID，主键',
   `book_id` int NOT NULL COMMENT '书ID',
   `equipment_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '装备名称',
   `equipment_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '装备类型',
@@ -107,27 +120,27 @@ CREATE TABLE `equipment`  (
   PRIMARY KEY (`equipment_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `equipment_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '装备表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '装备表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for file_directory
 -- ----------------------------
 DROP TABLE IF EXISTS `file_directory`;
 CREATE TABLE `file_directory`  (
-  `directory_id` int NOT NULL COMMENT '目录ID，主键',
+  `directory_id` int NOT NULL AUTO_INCREMENT COMMENT '目录ID，主键',
   `directory_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '目录名称',
   `book_id` int NOT NULL COMMENT '所属书ID',
   PRIMARY KEY (`directory_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `file_directory_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文件目录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文件目录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for gong_fa
 -- ----------------------------
 DROP TABLE IF EXISTS `gong_fa`;
 CREATE TABLE `gong_fa`  (
-  `technique_id` int NOT NULL COMMENT '功法ID，主键',
+  `technique_id` int NOT NULL AUTO_INCREMENT COMMENT '功法ID，主键',
   `book_id` int NOT NULL COMMENT '书ID',
   `technique_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '功法名称',
   `technique_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '功法类型',
@@ -138,14 +151,14 @@ CREATE TABLE `gong_fa`  (
   PRIMARY KEY (`technique_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `gong_fa_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '功法表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '功法表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for location_resource
 -- ----------------------------
 DROP TABLE IF EXISTS `location_resource`;
 CREATE TABLE `location_resource`  (
-  `location_id` int NOT NULL COMMENT '地点ID，主键',
+  `location_id` int NOT NULL AUTO_INCREMENT COMMENT '地点ID，主键',
   `book_id` int NOT NULL COMMENT '书ID',
   `location_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '地点名称',
   `location_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '地点类型',
@@ -155,26 +168,37 @@ CREATE TABLE `location_resource`  (
   PRIMARY KEY (`location_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `location_resource_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '地点资源表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '地点资源表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for resource
+-- ----------------------------
+DROP TABLE IF EXISTS `resource`;
+CREATE TABLE `resource`  (
+  `resource_id` int NOT NULL AUTO_INCREMENT COMMENT '资源ID，主键',
+  `resource_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '资源名称',
+  `is_global` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否全局通用',
+  PRIMARY KEY (`resource_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '资源表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for user_info
 -- ----------------------------
 DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info`  (
-  `id` int NOT NULL COMMENT '用户ID',
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `user_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户名',
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '密码',
   `vip_code` int NOT NULL COMMENT '权限（1：管理，0：路人）',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for weapon
 -- ----------------------------
 DROP TABLE IF EXISTS `weapon`;
 CREATE TABLE `weapon`  (
-  `weapon_id` int NOT NULL COMMENT '武器ID，主键',
+  `weapon_id` int NOT NULL AUTO_INCREMENT COMMENT '武器ID，主键',
   `book_id` int NOT NULL COMMENT '书ID',
   `weapon_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '武器名称',
   `weapon_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '武器类型',
@@ -185,6 +209,6 @@ CREATE TABLE `weapon`  (
   PRIMARY KEY (`weapon_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `weapon_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '武器表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '武器表' ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;
