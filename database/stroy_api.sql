@@ -11,7 +11,7 @@
  Target Server Version : 80041 (8.0.41)
  File Encoding         : 65001
 
- Date: 27/01/2025 10:32:25
+ Date: 27/01/2025 16:18:19
 */
 
 SET NAMES utf8mb4;
@@ -34,10 +34,12 @@ CREATE TABLE `book_details`  (
   `is_published` int NOT NULL DEFAULT 0 COMMENT '是否发布(1：发布，0：未发布)',
   `user_id` int NOT NULL COMMENT '用户ID',
   `book_content_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '故事大纲',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`book_id`) USING BTREE,
   INDEX `user_id`(`user_id` ASC) USING BTREE,
   CONSTRAINT `book_details_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '书详细信息表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '书详细信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for book_resource
@@ -46,6 +48,8 @@ DROP TABLE IF EXISTS `book_resource`;
 CREATE TABLE `book_resource`  (
   `book_id` int NOT NULL COMMENT '书ID',
   `resource_id` int NOT NULL COMMENT '资源ID',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`book_id`, `resource_id`) USING BTREE,
   INDEX `resource_id`(`resource_id` ASC) USING BTREE,
   CONSTRAINT `book_resource_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
@@ -67,10 +71,12 @@ CREATE TABLE `character_resource`  (
   `background_story` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '背景故事',
   `strength` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '实力',
   `is_alive` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否存活',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`character_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `character_resource_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '人物资源表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '人物资源表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for document
@@ -81,10 +87,12 @@ CREATE TABLE `document`  (
   `document_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '文档名称',
   `directory_id` int NOT NULL COMMENT '目录ID',
   `document_content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '文档内容',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`document_id`) USING BTREE,
   INDEX `directory_id`(`directory_id` ASC) USING BTREE,
   CONSTRAINT `document_ibfk_1` FOREIGN KEY (`directory_id`) REFERENCES `file_directory` (`directory_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文档表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文档表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for elixir
@@ -99,10 +107,12 @@ CREATE TABLE `elixir`  (
   `elixir_origin` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '丹药来源',
   `elixir_key_ingredient` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '丹药重要原料',
   `elixir_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '丹药描述',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`elixir_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `elixir_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '丹药表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '丹药表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for equipment
@@ -117,10 +127,12 @@ CREATE TABLE `equipment`  (
   `equipment_effect` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '装备效果',
   `equipment_origin` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '装备来源',
   `equipment_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '装备描述',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`equipment_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `equipment_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '装备表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '装备表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for file_directory
@@ -130,10 +142,12 @@ CREATE TABLE `file_directory`  (
   `directory_id` int NOT NULL AUTO_INCREMENT COMMENT '目录ID，主键',
   `directory_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '目录名称',
   `book_id` int NOT NULL COMMENT '所属书ID',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`directory_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `file_directory_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文件目录表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文件目录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for gong_fa
@@ -148,10 +162,12 @@ CREATE TABLE `gong_fa`  (
   `technique_effect` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '功法效果',
   `technique_origin` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '功法来源',
   `technique_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '功法描述',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`technique_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `gong_fa_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '功法表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '功法表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for location_resource
@@ -165,10 +181,12 @@ CREATE TABLE `location_resource`  (
   `location_feature` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '地点特色',
   `location_position` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '地点位置',
   `location_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '地点描述',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`location_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `location_resource_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '地点资源表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '地点资源表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for resource
@@ -178,8 +196,10 @@ CREATE TABLE `resource`  (
   `resource_id` int NOT NULL AUTO_INCREMENT COMMENT '资源ID，主键',
   `resource_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '资源名称',
   `is_global` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否全局通用',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`resource_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '资源表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '资源表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for user_info
@@ -190,8 +210,10 @@ CREATE TABLE `user_info`  (
   `user_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户名',
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '密码',
   `vip_code` int NOT NULL COMMENT '权限（1：管理，0：路人）',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户信息表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for weapon
@@ -206,9 +228,11 @@ CREATE TABLE `weapon`  (
   `weapon_power` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '武器威力',
   `weapon_origin` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '武器来源',
   `weapon_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '武器描述',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`weapon_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `weapon_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '武器表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '武器表' ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;
