@@ -1,0 +1,15 @@
+chat-interface/
+  ├── src/
+  │   ├── assets/
+  │   │   └── styles/
+  │   │       └── main.scss
+  │   ├── components/
+  │   │   ├── LeftSidebar.vue
+  │   │   ├── MainContent.vue
+  │   │   └── RightSidebar.vue
+  │   ├── views/
+  │   │   └── Home.vue
+  │   ├── App.vue
+  │   ├── main.js
+  │   ├── router.js
+  │   └── store.js 
