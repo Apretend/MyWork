@@ -9,25 +9,22 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-@TableName("user_info")
-public class UserInfo {
+@TableName("resource")
+public class Resource {
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private int id;
+    @TableId(value = "resource_id", type = IdType.AUTO)
+    private int resourceId;
 
-    @TableField(value = "user_name")
-    private String username;
+    @TableField("resource_name")
+    private String resourceName;
 
-    @TableField(value = "password")
-    private String password;
+    @TableField("is_global")
+    private int isGlobal;
 
-    @TableField(value = "vip_code")
-    private String vipCode;
-
-    @TableField(value = "create_time")
+    @TableField("create_time")
     private LocalDateTime createTime;
 
-    @TableField(value = "update_time")
+    @TableField("update_time")
     private LocalDateTime updateTime;
 
 }

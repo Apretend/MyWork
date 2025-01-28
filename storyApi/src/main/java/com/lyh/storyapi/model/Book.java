@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Data
 @TableName("book_details")
 public class Book {
@@ -45,4 +48,10 @@ public class Book {
 
     @TableField(value = "book_content_description")
     private String bookContentDescription;
+
+    @TableField(value = "create_time")
+    private LocalDateTime createTime;
+
+    @TableField(value = "update_time")
+    private LocalDateTime updateTime;
 }
