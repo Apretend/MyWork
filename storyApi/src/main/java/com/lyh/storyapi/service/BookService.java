@@ -17,6 +17,11 @@ public class BookService {
         return bookMapper.selectList(null);
     }
 
+    // 根据书名和用户ID查询
+    public List<Book> getBookListByNameAndUserId(String name, int userId){
+        return bookMapper.getBooksByNameAndUserId(name, userId);
+    }
+
     public Book getBookById(int id){
         return bookMapper.selectById(id);
     }

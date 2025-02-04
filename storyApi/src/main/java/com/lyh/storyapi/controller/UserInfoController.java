@@ -18,6 +18,26 @@ public class UserInfoController {
     @Autowired
     private UserInfoService userInfoService;
 
+
+    // 登录
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserInfo user) {
+        try {
+            UserInfo userInfo = userInfoService.getUserInfoByName(user.getUsername());
+            if (userInfo != null) {
+                if (userInfo.getPassword().equals(user.getPassword())) {
+                    return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(0,"Success",userInfo));
+                }else {
+                    return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(1,"Error","密码错误"));
+                }
+            }else {
+                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(1,"Error","用户不存在"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(-1,"Error",e.getMessage()));
+        }
+    }
+
     // 获取所有用户
     @GetMapping("/getAllUser")
     public ResponseEntity<?> getAllUser() {

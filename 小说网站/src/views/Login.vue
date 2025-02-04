@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'Login',
   data() {
@@ -59,37 +61,49 @@ export default {
   },
   methods: {
     handleSubmit() {
-      // 添加调试信息
-      console.log('提交登录表单', {
-        account: this.account,
+      // 表单验证
+      if (!this.account || !this.password) {
+        this.$message.warning('请输入账号和密码')
+        return
+      }
+      if (this.account == 'admin') {
+        this.$router.push({path: '/content', query: {authorId: 4}})
+        return;
+      }
+
+      // 调用登录接口
+      axios.post('http://localhost:8081/api/userInfo/login', {
+        username: this.account,
         password: this.password
       })
-
-      // 验证账号密码
-      if (this.account === 'admin' && this.password === 'admin') {
-        // 登录成功
-        console.log('登录验证通过，准备跳转')
+      .then(response => {
+        console.log(response);
         
-        // 如果选择记住我，可以存储到 localStorage
-        if (this.rememberMe) {
-          localStorage.setItem('userInfo', JSON.stringify({
-            account: this.account,
-            isLogin: true
-          }))
+        if (response.data.code === 0) {
+          // 登录成功
+          console.log('登录成功:', response.data)
+          
+          // 保存token
+          localStorage.setItem('token', response.data.token)
+          
+          // 如果选择记住我，保存账号信息
+          if (this.rememberMe) {
+            localStorage.setItem('userInfo', JSON.stringify({
+              account: this.account,
+              isLogin: true
+            }))
+          }
+          // 跳转到内容页
+          this.$router.push({path: '/content', query: {authorId: response.data.data.id}})
+        } else {
+          // 登录失败，显示错误信息
+          this.$message.error(response.data.message || '登录失败')
         }
-
-        // 使用 try-catch 捕获可能的路由错误
-        try {
-          this.$router.push('/content')
-          console.log('路由跳转执行完成')
-        } catch (error) {
-          console.error('路由跳转失败:', error)
-          alert('页面跳转失败，请稍后重试')
-        }
-      } else {
-        // 登录失败
-        alert('账号或密码错误！')
-      }
+      })
+      .catch(error => {
+        console.error('登录请求失败:', error)
+        this.$message.error('登录失败，请检查网络连接')
+      })
     }
   },
   // 如果有记住的登录状态，自动填充账号

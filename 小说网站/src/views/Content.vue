@@ -19,17 +19,18 @@
               prefix-icon="el-icon-search"
               @input="handleSearch"
             />
-          </div>
-
-          <!-- 搜索结果浮窗 -->
-          <div v-if="showSearchResults" class="search-results">
-            <div
-              v-for="result in searchResults"
-              :key="result.id"
-              class="search-result-item"
-              @click="selectNovel(result)"
-            >
-              {{ result.title }}
+            <!-- 搜索结果浮窗 -->
+            <div v-if="showSearchResults" class="search-results">
+              <div class="search-results-content">
+                <div
+                  v-for="result in searchResults"
+                  :key="result.id"
+                  class="search-result-item"
+                  @click="selectNovel(result.bookName, result.bookId)"
+                >
+                  {{ result.bookName }}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -39,14 +40,19 @@
               <span v-if="!isEditingTitle" class="title-text" @click="startEditTitle">
                 {{ currentNovelTitle }}
               </span>
-              <el-input
-                v-else
-                v-model="editingTitle"
-                ref="titleInput"
-                size="small"
-                @blur="saveTitle"
-                @keyup.enter.native="saveTitle"
-              ></el-input>
+              <div v-else class="title-edit-wrapper">
+                <el-input
+                  v-model="editingTitle"
+                  ref="titleInput"
+                  size="small"
+                  class="title-input"
+                >
+                  <template slot="suffix">
+                    <i class="el-icon-check title-confirm" @click="saveTitle"></i>
+                    <i class="el-icon-close title-cancel" @click="cancelTitleEdit"></i>
+                  </template>
+                </el-input>
+              </div>
               <div class="title-actions">
                 <i class="el-icon-edit" @click="startEditTitle" title="重命名"></i>
                 <i class="el-icon-plus" @click="handleAddDirectory" title="新建目录"></i>
@@ -58,6 +64,7 @@
           <div class="file-tree">
             <el-tree
               :data="fileTreeData"
+              style="padding-top: 5px;"
               node-key="id"
               :props="defaultProps"
               @node-click="handleNodeClick"
@@ -695,82 +702,18 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'Content',
   data() {
     return {
       searchQuery: '',
+      userId: '',
+      bookId: '',
       showSearchResults: false,
-      searchResults: [
-        { id: 1, title: '稿费起飞从搭建工具开始' },
-        { id: 2, title: '我在修仙界开网店' },
-        { id: 3, title: '修真界的程序员' },
-        { id: 4, title: '重生之修仙大佬' }
-      ],
-      currentNovel: {
-        id: 1,
-        title: '稿费起飞从搭建工具开始'
-      },
-      fileTreeData: [
-        {
-          id: 1,
-          label: '第一卷 天道初现',
-          type: 'directory',
-          children: [
-            { id: 3, label: '第一章 灵气复苏.txt', type: 'file' },
-            { id: 4, label: '第二章 觉醒天赋.txt', type: 'file' },
-            { id: 5, label: '第三章 踏上修仙路.txt', type: 'file' },
-            { id: 6, label: '第四章 初入门派.txt', type: 'file' },
-            { id: 7, label: '第五章 修炼基础.txt', type: 'file' },
-            { id: 8, label: '第六章 同门切磋.txt', type: 'file' }
-          ]
-        },
-        {
-          id: 2,
-          label: '第二卷 修行之路',
-          type: 'directory',
-          children: [
-            { id: 9, label: '第一章 下山历练.txt', type: 'file' },
-            { id: 10, label: '第二章 遇到妖兽.txt', type: 'file' },
-            { id: 11, label: '第三章 这是一个很长很长的标题，用来测试超出宽度时的省略号效果.txt', type: 'file' },
-            { id: 12, label: '第四章 意外收获.txt', type: 'file' },
-            { id: 13, label: '第五章 突破瓶颈.txt', type: 'file' }
-          ]
-        },
-        {
-          id: 14,
-          label: '第三卷 大道争锋',
-          type: 'directory',
-          children: [
-            { id: 15, label: '第一章 宗门大比.txt', type: 'file' },
-            { id: 16, label: '第二章 惊人发现.txt', type: 'file' },
-            { id: 17, label: '第三章 古老传承.txt', type: 'file' },
-            { id: 18, label: '第四章 修为精进.txt', type: 'file' }
-          ]
-        },
-        {
-          id: 19,
-          label: '第四卷 天地变化',
-          type: 'directory',
-          children: [
-            { id: 20, label: '第一章 世界异变.txt', type: 'file' },
-            { id: 21, label: '第二章 神秘遗迹.txt', type: 'file' },
-            { id: 22, label: '第三章 远古秘密.txt', type: 'file' },
-            { id: 23, label: '第四章 惊天真相.txt', type: 'file' },
-            { id: 24, label: '第五章 这又是一个超长的标题用来测试水平滚动条的显示效果以及文本是否会被截断.txt', type: 'file' }
-          ]
-        },
-        {
-          id: 25,
-          label: '第五卷 巅峰对决',
-          type: 'directory',
-          children: [
-            { id: 26, label: '第一章 最终之战.txt', type: 'file' },
-            { id: 27, label: '第二章 决战时刻.txt', type: 'file' },
-            { id: 28, label: '第三章 胜负已分.txt', type: 'file' }
-          ]
-        }
-      ],
+      searchResults: [],
+      currentNovel: null, // 当前选中的小说对象 {id, title, chapterCount, intro}
+      fileTreeData: [], // 章节目录树数据 [{id, label, type, children}]
       defaultProps: {
         children: 'children',
         label: 'label'
@@ -783,7 +726,7 @@ export default {
         { type: 'elixir', label: '丹药' },
         { type: 'gongfa', label: '功法' },
       ],
-      showItemFormType: '',
+      showItemFormType: '', // 当前显示的资源表单类型
       characterForm: {
         name: '',
         gender: '',
@@ -833,17 +776,27 @@ export default {
         origin: '',
         description: ''
       },
-      content: '',
-      isEditingTitle: false,
-      editingTitle: '',
-      editingNode: null,
-      editingLabel: '',
-      chapterNumber: '',
-      chapterTitle: '',
-      startTime: null,
-      endTime: null,
-      wordCount: 0,
-      lastWordCount: 0,
+      content: '', // 当前编辑的章节内容
+      isEditingTitle: false, // 是否正在编辑标题
+      editingTitle: '', // 正在编辑的标题内容
+      editingNode: null, // 正在编辑的节点
+      editingLabel: '', // 正在编辑的节点标签
+      resources: {}, // 资源数据 {character: [], location: [], weapon: [], equipment: [], elixir: [], gongfa: []}
+      searchKeywords: {}, // 资源搜索关键词 {character: '', location: '', ...}
+      activeTab: 'resource', // 当前激活的标签页
+      outlineContent: '', // 细纲内容
+      bookTitleList: [
+        { value: '' } // 书名列表
+      ],
+      bookCover: '', // 封面图片
+      bookIntro: '', // 简介
+      bookStory: '', // 故事大纲
+      libraryBooks: [], // 图书馆书籍列表数据
+      librarySearchQuery: '', // 图书搜索关键词
+      startTime: null, // 开始写作时间
+      endTime: null, // 结束时间
+      wordCount: 0, // 当前字数
+      lastWordCount: 0, // 上次字数
       expandedType: '',
       mockResources: {
         character: [
@@ -888,51 +841,6 @@ export default {
           { name: '天雷靴', description: '一种可以释放天雷的靴子' }
         ]
       },
-      searchKeywords: {},
-      activeTab: 'resource',
-      outlineContent: '',
-      bookTitleList: [
-        { value: '稿费起飞从搭建工具开始' }
-      ],
-      bookCover: '',
-      bookIntro: '',
-      bookStory: '',
-      libraryBooks: [
-        {
-          id: 1,
-          title: '稿费起飞从搭建工具开始',
-          chapterCount: 23,
-          intro: '这是一个关于程序员如何通过开发工具实现稿费收入突飞猛进的故事，主人公通过自己的努力和天赋，开发出了一款深受用户喜爱的写作工具...'
-        },
-        {
-          id: 2,
-          title: '重生之科技巨头',
-          chapterCount: 45,
-          intro: '一位互联网公司的普通程序员意外重生到了20年前，凭借对未来科技发展的了解，开启了一段传奇之路，从零开始打造属于自己的科技帝国。'
-        },
-        {
-          id: 3,
-          title: '修仙从写代码开始',
-          chapterCount: 67,
-          intro: '程序员王小明发现自己写的代码竟然能产生法力，一行行代码编织出神奇的法术，用程序员的方式在修仙界掀起一场革命。'
-        },
-        {
-          id: 4,
-          title: '全球编程之王',
-          chapterCount: 89,
-          intro: '在一个编程就是一切的世界里，主角凭借着对代码的极致理解和创新思维，在全球编程竞赛中不断创造奇迹，最终成为传说中的编程之王。'
-        },
-        {
-          id: 5,
-          title: 'AI时代的旅行者',
-          chapterCount: 34,
-          intro: '在人工智能全面普及的未来世界，一位极客少年意外获得了一段神秘代码，由此揭开了AI背后不为人知的秘密。'
-        }
-      ],
-      newBookData: {
-        title: '',
-        subTitles: ['', '']
-      },
       dialogVisible: false,
       dialogImageUrl: '',
       disabled: false,
@@ -943,12 +851,11 @@ export default {
       newBookIntro: '',
       newBookStory: '',
       newBookFileList: [],
-      librarySearchQuery: '',
     }
   },
   computed: {
     currentNovelTitle() {
-      return this.currentNovel ? this.currentNovel.title : '未选择小说'
+      return this.currentNovel ? this.currentNovel : '未选择小说'
     },
     currentItemType() {
       return this.itemTypes.find(item => item.type === this.showItemFormType)
@@ -968,32 +875,50 @@ export default {
       )
     }
   },
+  mounted() {
+    this.userId = this.$route.query.authorId
+    console.log(this.userId);
+    
+    if (!this.userId) {
+      this.$message.error('未登录')
+      this.$router.push('/')
+    }
+  },
   methods: {
     handleLogout() {
       localStorage.removeItem('userInfo')
+      localStorage.removeItem('token')
       this.$router.push('/')
     },
     handleSearch() {
-      if (this.searchQuery) {
-        // 过滤搜索结果
-        const filteredResults = this.searchResults.filter(item =>
-          item.title.toLowerCase().includes(this.searchQuery.toLowerCase())
-        )
-        this.showSearchResults = filteredResults.length > 0
+      if (this.searchQuery.trim()) {
+        let bookAndAuthorId = {
+          "bookName": this.searchQuery,
+          "authorId": this.userId
+        }
+        console.log(bookAndAuthorId);
+        this.showSearchResults = true;
+        axios.post('http://127.0.0.1:8081/api/books/getBookByName', bookAndAuthorId)
+        .then(response => {
+          console.log(response);
+          this.searchResults = response.data.data
+        })
       } else {
         this.showSearchResults = false
       }
     },
-    selectNovel(novel) {
-      this.currentNovel = novel
-      this.showSearchResults = false
+    selectNovel(novel, id) {
+      this.currentNovel = novel;
+      this.bookId = id;
+      this.showSearchResults = false;
       // 加载文件树
       this.loadFileTree()
       // 提示选择成功
       this.$message({
         type: 'success',
-        message: `已切换到《${novel.title}》`
+        message: `已切换到《${novel}》`
       })
+      this.searchQuery = '';
     },
     loadFileTree() {
       // 模拟文件树数据
@@ -1176,20 +1101,37 @@ export default {
     // 开始编辑小说标题
     startEditTitle() {
       this.isEditingTitle = true
-      this.editingTitle = this.currentNovel.title
+      this.editingTitle = this.currentNovel
       this.$nextTick(() => {
         this.$refs.titleInput.$refs.input.focus()
         this.$refs.titleInput.$refs.input.select()
       })
     },
 
+    // 取消标题编辑
+    cancelTitleEdit() {
+      this.isEditingTitle = false
+      this.editingTitle = this.currentNovelTitle
+    },
+
     // 保存小说标题
     saveTitle() {
       if (this.editingTitle.trim()) {
-        this.currentNovel.title = this.editingTitle.trim()
-        this.$message({
-          type: 'success',
-          message: '重命名成功'
+        console.log(this.editingTitle.trim());
+        console.log(this.bookId);
+        this.currentNovel = this.editingTitle.trim()
+        axios.post('http://127.0.0.1:8081/api/books/updateBook', {
+          bookId: this.bookId,
+          bookName: this.editingTitle.trim()
+        }).then(response => {
+          if (response.data.code === 0) {
+            this.$message({
+              type: 'success',
+              message: '重命名成功'
+            })
+          } else {
+            this.$message.error('重命名失败')
+          }
         })
       }
       this.isEditingTitle = false
@@ -1365,9 +1307,12 @@ export default {
 
 <style scoped>
 .content-page {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+  min-height: 100vh;
+  background: #f0f2f5;
+}
+
+.content-container {
+  padding: 24px;
 }
 
 .header {
@@ -1405,32 +1350,60 @@ export default {
 }
 
 .search-box {
-  margin: 15px 0 15px 15px;  /* 上右下左 */
-  flex-shrink: 0;
+  position: relative;
+  margin-bottom: 16px;
+  padding-left: 16px;
 }
 
 .search-results {
   position: absolute;
-  width: calc(100% - 31px);  /* 调整宽度以适应新的右侧间距 */
-  margin: 0 0 0 15px;  /* 上右下左 */
+  top: 100%;
+  left: 0;
+  right: 0;
   background: white;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #dcdfe6;
   border-radius: 4px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
   z-index: 1000;
+  margin-left: 16px;
+}
+
+.search-results-content {
+  max-height: 200px;
+  overflow-x: auto;
+  overflow-y: auto;
 }
 
 .search-result-item {
   padding: 8px 16px;
   cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .search-result-item:hover {
+  background-color: #f5f7fa;
+}
+
+/* 自定义滚动条样式 */
+.search-results-content::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.search-results-content::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: #c0c4cc;
+}
+
+.search-results-content::-webkit-scrollbar-track {
+  border-radius: 3px;
   background: #f5f7fa;
 }
 
 .novel-header {
-  margin: 0 0 15px 15px;  /* 上右下左 */
+  margin: 0 0 0 15px;  /* 上右下左 */
   padding: 8px 12px;
   background: #f5f7fa;
   border-radius: 4px;
@@ -1440,11 +1413,12 @@ export default {
 .novel-title {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  width: 100%;
 }
 
 .title-text {
   flex: 1;
+  margin-right: 8px;
   font-size: 14px;
   font-weight: 500;
   color: #303133;
@@ -1458,6 +1432,7 @@ export default {
 .title-actions {
   display: flex;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .title-actions i {
@@ -1746,7 +1721,6 @@ export default {
 
 /* 添加输入框样式 */
 .el-input {
-  margin: -5px 0;
   cursor: text !important;
   user-select: text !important;
 }
@@ -2141,5 +2115,49 @@ export default {
   text-overflow: ellipsis;
   line-height: 1.5;  /* 设置行高 */
   max-height: 36px;  /* 2行文字的最大高度：12px * 1.5 * 2 = 36px */
+}
+
+.title-edit-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin-right: 8px;
+}
+
+.title-input {
+  width: 100%;
+}
+
+.title-input :deep(.el-input__suffix) {
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.title-confirm,
+.title-cancel {
+  padding: 0 8px;
+  height: 28px;
+  line-height: 28px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.title-confirm {
+  color: #67C23A;
+  margin-right: 4px;
+}
+
+/* 调整输入框内部padding，为按钮留出空间 */
+.title-input :deep(.el-input__inner) {
+  padding-right: 70px;
+}
+
+/* 确保suffix容器不会被压缩 */
+.title-input :deep(.el-input__suffix-inner) {
+  display: flex;
+  align-items: center;
 }
 </style> 
