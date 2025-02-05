@@ -11,7 +11,7 @@
  Target Server Version : 80041 (8.0.41)
  File Encoding         : 65001
 
- Date: 27/01/2025 16:18:19
+ Date: 05/02/2025 11:03:50
 */
 
 SET NAMES utf8mb4;
@@ -42,6 +42,11 @@ CREATE TABLE `book_details`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '书详细信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
+-- Records of book_details
+-- ----------------------------
+INSERT INTO `book_details` VALUES (12, '根队面叫小军工', '名存见气位新', '最名安想', '流火状教', '如按一院', '往别放话声律用求声向消色生动究己。区组基利做时专号现积色进现治取下质。传以身任北体张育如之历心片导联并解快。积难去音极最置省此标接两达于性么克。口头当导无并市类族书历那将了克北。以研决向类精展向好王道深形道统统。每相种就应最图千点酸精求拉平立。', 'dolore pariatur', 88, 45, 1, 'est nisi laborum', '2025-01-27 11:54:37', '2025-01-27 11:54:37');
+
+-- ----------------------------
 -- Table structure for book_resource
 -- ----------------------------
 DROP TABLE IF EXISTS `book_resource`;
@@ -55,6 +60,10 @@ CREATE TABLE `book_resource`  (
   CONSTRAINT `book_resource_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `book_resource_ibfk_2` FOREIGN KEY (`resource_id`) REFERENCES `resource` (`resource_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '书资源关联表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of book_resource
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for character_resource
@@ -76,7 +85,11 @@ CREATE TABLE `character_resource`  (
   PRIMARY KEY (`character_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `character_resource_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '人物资源表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '人物资源表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of character_resource
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for document
@@ -92,7 +105,11 @@ CREATE TABLE `document`  (
   PRIMARY KEY (`document_id`) USING BTREE,
   INDEX `directory_id`(`directory_id` ASC) USING BTREE,
   CONSTRAINT `document_ibfk_1` FOREIGN KEY (`directory_id`) REFERENCES `file_directory` (`directory_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文档表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文档表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of document
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for elixir
@@ -112,7 +129,11 @@ CREATE TABLE `elixir`  (
   PRIMARY KEY (`elixir_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `elixir_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '丹药表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '丹药表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of elixir
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for equipment
@@ -132,7 +153,11 @@ CREATE TABLE `equipment`  (
   PRIMARY KEY (`equipment_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `equipment_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '装备表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '装备表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of equipment
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for file_directory
@@ -147,7 +172,11 @@ CREATE TABLE `file_directory`  (
   PRIMARY KEY (`directory_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `file_directory_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文件目录表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文件目录表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of file_directory
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for gong_fa
@@ -170,6 +199,10 @@ CREATE TABLE `gong_fa`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '功法表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
+-- Records of gong_fa
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for location_resource
 -- ----------------------------
 DROP TABLE IF EXISTS `location_resource`;
@@ -189,6 +222,10 @@ CREATE TABLE `location_resource`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '地点资源表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
+-- Records of location_resource
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for resource
 -- ----------------------------
 DROP TABLE IF EXISTS `resource`;
@@ -200,6 +237,10 @@ CREATE TABLE `resource`  (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`resource_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '资源表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of resource
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for user_info
@@ -214,6 +255,13 @@ CREATE TABLE `user_info`  (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of user_info
+-- ----------------------------
+INSERT INTO `user_info` VALUES (1, 'admin', 'admin', 1, '2025-01-27 10:37:19', '2025-01-27 10:37:19');
+INSERT INTO `user_info` VALUES (2, 'guest', 'guest', 0, '2025-01-27 10:37:19', '2025-01-27 10:37:19');
+INSERT INTO `user_info` VALUES (3, 'lyh', '123456', 1, '2025-01-27 10:58:32', '2025-01-27 10:58:32');
 
 -- ----------------------------
 -- Table structure for weapon
@@ -234,5 +282,9 @@ CREATE TABLE `weapon`  (
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `weapon_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '武器表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of weapon
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;
