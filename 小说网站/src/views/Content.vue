@@ -1306,858 +1306,858 @@ export default {
 </script>
 
 <style scoped>
-.content-page {
-  min-height: 100vh;
-  background: #f0f2f5;
-}
-
-.content-container {
-  padding: 24px;
-}
-
-.header {
-  background: white;
-  padding: 16px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.main-container {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
-}
-
-.left-panel,
-.right-panel {
-  width: 400px;
-  min-width: 400px;
-  max-width: 400px;
-  border-right: 1px solid #e0e0e0;
-}
-
-.document-section {
-  height: 500px;
-  min-height: 500px;
-  max-height: 500px;
-  padding: 5px 16px 16px 5px;  /* 上右下左，修改底部内边距为 16px */
-  border-bottom: 1px solid #e0e0e0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.search-box {
-  position: relative;
-  margin-bottom: 16px;
-  padding-left: 16px;
-}
-
-.search-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
-  z-index: 1000;
-  margin-left: 16px;
-}
-
-.search-results-content {
-  max-height: 200px;
-  overflow-x: auto;
-  overflow-y: auto;
-}
-
-.search-result-item {
-  padding: 8px 16px;
-  cursor: pointer;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.search-result-item:hover {
-  background-color: #f5f7fa;
-}
-
-/* 自定义滚动条样式 */
-.search-results-content::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
-}
-
-.search-results-content::-webkit-scrollbar-thumb {
-  border-radius: 3px;
-  background: #c0c4cc;
-}
-
-.search-results-content::-webkit-scrollbar-track {
-  border-radius: 3px;
-  background: #f5f7fa;
-}
-
-.novel-header {
-  margin: 0 0 0 15px;  /* 上右下左 */
-  padding: 8px 12px;
-  background: #f5f7fa;
-  border-radius: 4px;
-  flex-shrink: 0;
-}
-
-.novel-title {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.title-text {
-  flex: 1;
-  margin-right: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #303133;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  cursor: default;
-  user-select: none;
-}
-
-.title-actions {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.title-actions i {
-  font-size: 16px;
-  color: #909399;
-  cursor: pointer;
-  padding: 2px;
-}
-
-.title-actions i:hover {
-  color: #409EFF;
-}
-
-.file-tree {
-  flex: 1;
-  overflow: auto;
-  padding: 0 0 16px 15px;
-}
-
-/* 添加一个内容容器来保持底部间距 */
-:deep(.el-tree) {
-  padding-bottom: 5px; /* 内容区域与滚动条的间距 */
-  min-height: 100%;
-}
-
-/* 确保最后一个节点也有底部间距 */
-:deep(.el-tree-node:last-child) {
-  margin-bottom: 5px;
-}
-
-.custom-tree-node {
-  display: flex;
-  align-items: center;
-  width: calc(100% - 10px);
-  overflow-x: auto;
-  user-select: none;
-  padding-bottom: 5px; /* 添加底部内边距，让内容与滚动条保持距离 */
-}
-
-.node-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-width: 100%;
-  padding-right: 5px;
-  position: relative;
-}
-
-.node-content {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-  min-width: 0;
-  padding-right: 70px; /* 为操作按钮预留空间 */
-}
-
-.node-icon {
-  font-size: 16px;
-  color: #909399;
-}
-
-.el-icon-folder {
-  color: #e6a23c;
-}
-
-.el-icon-document {
-  color: #409EFF;
-}
-
-.node-label {
-  white-space: nowrap;
-  overflow: visible; /* 允许文本完整显示 */
-  flex: 1;
-}
-
-.node-actions {
-  position: absolute;
-  right: 5px;
-  display: none;
-  gap: 8px;
-  background: inherit;
-}
-
-/* 调整滚动条样式 */
-.custom-tree-node::-webkit-scrollbar {
-  height: 6px;
-}
-
-.custom-tree-node::-webkit-scrollbar-thumb {
-  background: #c0c4cc;
-  border-radius: 3px;
-}
-
-.custom-tree-node::-webkit-scrollbar-track {
-  background: #f5f7fa;
-}
-
-/* 确保树节点容器不会限制内容宽度 */
-:deep(.el-tree-node__content) {
-  min-width: fit-content;
-  padding-right: 0 !important;
-}
-
-:deep(.el-tree-node) {
-  min-width: fit-content;
-  white-space: nowrap;
-}
-
-.items-section {
-  flex: 1;
-  height: 300px;
-  min-height: 300px;
-  max-height: 300px;
-  padding: 20px;
-  overflow-y: auto;
-}
-
-.item-buttons {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);  /* 保持两列布局 */
-  gap: 10px;  /* 统一设置按钮之间的间距为 10px */
-  width: 100%;
-  padding: 0 10px;  /* 添加左右内边距 */
-}
-
-.item-buttons .el-button {
-  width: 100%;
-  height: 32px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;  /* 移除按钮默认的外边距 */
-}
-
-/* 确保按钮文字居中 */
-.item-buttons .el-button span {
-  display: inline-block;
-  width: 100%;
-  text-align: center;
-}
-
-.item-form {
-  width: 100%;
-}
-
-.form-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: #303133;
-  margin: 0 0 20px 0;
-  text-align: center;
-}
-
-.form-actions {
-  margin-top: 24px;
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* 调整滚动条样式 */
-.items-section::-webkit-scrollbar {
-  width: 6px;
-}
-
-.items-section::-webkit-scrollbar-thumb {
-  background: #c0c4cc;
-  border-radius: 3px;
-}
-
-.items-section::-webkit-scrollbar-track {
-  background: #f5f7fa;
-}
-
-.center-panel {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  padding: 32px 0;  /* 保持上下间距 32px */
-  background: #f5f7fa;
-}
-
-.editor-container {
-  width: calc(210mm + 180px);  /* A4纸宽度 + 统计信息宽度 + 间距 */
-  height: 100%;
-  background: white;
-  padding: 32px 20mm 16px;
-  display: flex;
-  flex-direction: column;
-}
-
-/* 章节标题区域样式 */
-.chapter-title {
-  display: flex;
-  align-items: center;
-  margin-bottom: 16px;  /* 与编辑区域的间距 */
-  gap: 8px;
-  flex-shrink: 0;  /* 防止标题区域被压缩 */
-}
-
-.chapter-prefix,
-.chapter-middle {
-  font-size: 14px;
-  color: #303133;
-}
-
-.chapter-number {
-  width: 60px;
-}
-
-.chapter-name {
-  flex: 1;
-}
-
-/* 编辑器内容区域 */
-.editor-content {
-  flex: 1;
-  display: flex;
-  gap: 16px;  /* 输入框和统计信息之间的间距 */
-}
-
-/* 内容包装器样式 */
-.content-wrapper {
-  flex: 1;
-  display: flex;
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-/* 文本输入框样式 */
-.content-textarea {
-  width: 100%;
-}
-
-:deep(.content-textarea .el-textarea__inner) {
-  height: 100% !important;
-  border: none;
-  padding: 16px;
-  line-height: 1.6;
-  font-size: 14px;
-  resize: none;
-  background: transparent;
-}
-
-/* 修改统计信息显示样式 */
-.content-stats {
-  width: 140px;
-  flex-shrink: 0;
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  padding: 16px;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-  height: 100%;  /* 确保占满整个高度 */
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-/* 添加保存按钮样式 */
-.save-content-btn {
-  margin-top: auto;  /* 将按钮推到底部 */
-  width: 100%;      /* 按钮宽度占满 */
-}
-
-.logout-btn {
-  padding: 8px 16px;
-  background: #ff3b30;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.logout-btn:hover {
-  background: #ff453a;
-}
-
-/* 添加输入框样式 */
-.el-input {
-  cursor: text !important;
-  user-select: text !important;
-}
-
-.el-input.el-input--small .el-input__inner {
-  height: 28px;
-  line-height: 28px;
-}
-
-/* 覆盖 element-ui 的默认样式 */
-:deep(.el-tree-node__content) {
-  user-select: none !important;
-}
-
-:deep(.el-tree-node__expand-icon) {
-  user-select: none !important;
-  cursor: pointer !important;
-}
-
-/* 调整 tooltip 样式 */
-:deep(.el-tooltip__popper) {
-  max-width: 300px;
-  word-break: break-all;
-}
-
-/* 调整滚动条样式 */
-.file-tree::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.file-tree::-webkit-scrollbar-thumb {
-  background: #c0c4cc;
-  border-radius: 3px;
-}
-
-.file-tree::-webkit-scrollbar-track {
-  background: #f5f7fa;
-}
-
-.right-panel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 0;  /* 移除内边距 */
-}
-
-.tabs {
-  height: 40px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #dcdfe6;
-  background: #fff;
-  padding: 0;
-  margin: 0;
-  user-select: none;  /* 整个选项卡区域都不可选中 */
-}
-
-.tab {
-  height: 40px;
-  line-height: 40px;
-  padding: 0 20px;
-  font-size: 14px;
-  color: #606266;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.3s;
-  margin: 0;
-  border: none;
-  user-select: none;  /* 防止文本被选中 */
-  outline: none;      /* 移除点击时的轮廓 */
-}
-
-.tab:hover {
-  color: #409EFF;
-}
-
-.tab.active {
-  color: #409EFF;
-  font-weight: 500;
-}
-
-.tab.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #409EFF;
-}
-
-.resource-list {
-  flex: 1;
-  overflow-y: auto;
-}
-
-.resource-section {
-  margin-bottom: 10px;
-}
-
-.resource-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 48px;
-  padding: 0 16px;
-  background: #f5f7fa;
-  cursor: pointer;
-  user-select: none;
-}
-
-.resource-header:hover {
-  background: #ecf5ff;
-}
-
-.resource-title {
-  font-size: 14px;
-  font-weight: 500;
-  color: #303133;
-}
-
-.el-icon-arrow-down {
-  font-size: 14px;
-  color: #909399;
-  transition: transform 0.3s ease;
-}
-
-.el-icon-arrow-down.expanded {
-  transform: rotate(180deg);
-}
-
-.resource-content {
-  background: #fff;
-  border: 1px solid #e4e7ed;
-  border-top: none;
-  margin-bottom: 8px;
-}
-
-.resource-search {
-  padding: 16px;
-  border-bottom: 1px solid #e4e7ed;
-}
-
-.resource-list-content {
-  padding: 16px;
-}
-
-.resource-item {
-  padding: 12px;
-  border: 1px solid #ebeef5;
-  border-radius: 4px;
-  margin-bottom: 8px;
-  background: #fff;
-}
-
-.resource-item:last-child {
-  margin-bottom: 0;
-}
-
-.resource-name {
-  font-size: 14px;
-  font-weight: 500;
-  color: #303133;
-}
-
-.resource-info {
-  margin-top: 5px;
-  font-size: 12px;
-  color: #909399;
-}
-
-.resource-desc {
-  margin-top: 5px;
-  font-size: 12px;
-  color: #606266;
-}
-
-.tab-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
-  background: #fff;
-}
-
-.book-titles {
-  margin-bottom: 6px;  /* 书名输入框列表的底部间距 */
-}
-
-.title-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 16px;  /* 每个书名输入框的底部间距 */
-}
-
-.title-item:last-child {
-  margin-bottom: 0;  /* 最后一个输入框不需要底部间距 */
-}
-
-.book-section .el-textarea {
-  margin-bottom: 16px;  /* 文本域的底部间距 */
-}
-
-.cover-uploader {
-  margin-bottom: 16px;  /* 封面上传控件的底部间距 */
-}
-
-/* 最后一个区块的最后一个元素不需要底部间距 */
-.book-section:last-child > *:last-child {
-  margin-bottom: 0;
-}
-
-.book-section {
-  margin-bottom: 20px;
-}
-
-.section-title {
-  font-size: 16px;
-  font-weight: 500;
-  font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: #606266;
-  margin-bottom: 8px;  /* 标题和控件的间距 */
-  user-select: none;   /* 防止文本选择 */
-  cursor: default;     /* 使用默认光标 */
-}
-.section-title.book-title {
-  margin-bottom: 12px;
-}
-
-.section-title.required::after {
-  content: '*';
-  color: #f56c6c;
-  margin-left: 4px;
-}
-
-.book-intro {
-  margin-top: 5px;
-  font-size: 12px;
-  color: #606266;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;  /* 限制显示两行 */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.5;  /* 设置行高 */
-  max-height: 36px;  /* 2行文字的最大高度：12px * 1.5 * 2 = 36px */
-}
-
-.book-story {
-  margin-bottom: 20px;
-}
-
-.book-info {
-  padding: 20px;
-}
-
-.library-content {
-  padding: 20px;
-}
-
-.library-book-item {
-  margin-bottom: 10px;
-}
-
-.book-main-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: #303133;
-}
-
-.book-sub-titles {
-  margin-top: 5px;
-  font-size: 12px;
-  color: #909399;
-}
-
-.new-book-content {
-  padding: 20px;
-}
-
-.form-actions {
-  margin-top: 24px;
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* 修改输入框和文本域的样式 */
-.title-item .el-input {
-  user-select: text;  /* 允许文本选择 */
-}
-
-.title-item .el-input__inner {
-  user-select: text;  /* 允许文本选择 */
-  cursor: text;       /* 显示文本光标 */
-}
-
-.title-item .el-input__wrapper {
-  user-select: none;  /* 防止外层被选中 */
-  cursor: default;    /* 使用默认光标 */
-}
-
-.input-wrapper {
-  position: relative;
-  user-select: none;  /* 防止外层被选中 */
-  cursor: default;    /* 使用默认光标 */
-}
-
-.input-wrapper .el-textarea {
-  user-select: text;  /* 允许文本选择 */
-}
-
-.input-wrapper .el-textarea__inner {
-  user-select: text;  /* 允许文本选择 */
-  cursor: text;       /* 显示文本光标 */
-}
-
-/* 确保文字计数器不可选 */
-.word-count {
-  user-select: none;
-  cursor: default;
-}
-
-/* 确保标题不可选 */
-.section-title {
-  user-select: none;
-  cursor: default;
-}
-
-/* 修改表单操作区样式 */
-.form-actions {
-  margin-top: 24px;
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* 确保最后一个 book-section 和 form-actions 之间有正确的间距 */
-.book-section:last-of-type {
-  margin-bottom: 0;
-}
-
-/* 修改书库区域样式 */
-.library-search {
-  padding: 16px;
-  border-bottom: 1px solid #e4e7ed;
-}
-
-.library-list {
-  padding: 16px;
-}
-
-.library-book-item {
-  padding: 12px;
-  border: 1px solid #ebeef5;
-  border-radius: 4px;
-  margin-bottom: 8px;
-  background: #fff;
-  cursor: pointer;
-  transition: all 0.2s ease;  /* 添加过渡效果 */
-}
-
-.library-book-item:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-}
-
-.book-item-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.book-name {
-  font-size: 14px;
-  font-weight: 500;
-  color: #303133;
-}
-
-.chapter-count {
-  font-size: 12px;
-  color: #909399;
-}
-
-.book-intro {
-  margin-top: 5px;
-  font-size: 12px;
-  color: #606266;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;  /* 限制显示两行 */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.5;  /* 设置行高 */
-  max-height: 36px;  /* 2行文字的最大高度：12px * 1.5 * 2 = 36px */
-}
-
-.title-edit-wrapper {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  margin-right: 8px;
-}
-
-.title-input {
-  width: 100%;
-}
-
-.title-input :deep(.el-input__suffix) {
-  padding: 0;
-  display: flex;
-  align-items: center;
-}
-
-.title-confirm,
-.title-cancel {
-  padding: 0 8px;
-  height: 28px;
-  line-height: 28px;
-  cursor: pointer;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-}
-
-.title-confirm {
-  color: #67C23A;
-  margin-right: 4px;
-}
-
-/* 调整输入框内部padding，为按钮留出空间 */
-.title-input :deep(.el-input__inner) {
-  padding-right: 70px;
-}
-
-/* 确保suffix容器不会被压缩 */
-.title-input :deep(.el-input__suffix-inner) {
-  display: flex;
-  align-items: center;
-}
+  .content-page {
+    min-height: 100vh;
+    background: #f0f2f5;
+  }
+
+  .content-container {
+    padding: 24px;
+  }
+
+  .header {
+    background: white;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .main-container {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+
+  .left-panel,
+  .right-panel {
+    width: 400px;
+    min-width: 400px;
+    max-width: 400px;
+    border-right: 1px solid #e0e0e0;
+  }
+
+  .document-section {
+    height: 500px;
+    min-height: 500px;
+    max-height: 500px;
+    padding: 5px 16px 16px 5px;  /* 上右下左，修改底部内边距为 16px */
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .search-box {
+    position: relative;
+    margin-bottom: 16px;
+    padding-left: 16px;
+  }
+
+  .search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    z-index: 1000;
+    margin-left: 16px;
+  }
+
+  .search-results-content {
+    max-height: 200px;
+    overflow-x: auto;
+    overflow-y: auto;
+  }
+
+  .search-result-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .search-result-item:hover {
+    background-color: #f5f7fa;
+  }
+
+  /* 自定义滚动条样式 */
+  .search-results-content::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+  }
+
+  .search-results-content::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: #c0c4cc;
+  }
+
+  .search-results-content::-webkit-scrollbar-track {
+    border-radius: 3px;
+    background: #f5f7fa;
+  }
+
+  .novel-header {
+    margin: 0 0 0 15px;  /* 上右下左 */
+    padding: 8px 12px;
+    background: #f5f7fa;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .novel-title {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .title-text {
+    flex: 1;
+    margin-right: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #303133;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: default;
+    user-select: none;
+  }
+
+  .title-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .title-actions i {
+    font-size: 16px;
+    color: #909399;
+    cursor: pointer;
+    padding: 2px;
+  }
+
+  .title-actions i:hover {
+    color: #409EFF;
+  }
+
+  .file-tree {
+    flex: 1;
+    overflow: auto;
+    padding: 0 0 16px 15px;
+  }
+
+  /* 添加一个内容容器来保持底部间距 */
+  :deep(.el-tree) {
+    padding-bottom: 5px; /* 内容区域与滚动条的间距 */
+    min-height: 100%;
+  }
+
+  /* 确保最后一个节点也有底部间距 */
+  :deep(.el-tree-node:last-child) {
+    margin-bottom: 5px;
+  }
+
+  .custom-tree-node {
+    display: flex;
+    align-items: center;
+    width: calc(100% - 10px);
+    overflow-x: auto;
+    user-select: none;
+    padding-bottom: 5px; /* 添加底部内边距，让内容与滚动条保持距离 */
+  }
+
+  .node-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 100%;
+    padding-right: 5px;
+    position: relative;
+  }
+
+  .node-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+    padding-right: 70px; /* 为操作按钮预留空间 */
+  }
+
+  .node-icon {
+    font-size: 16px;
+    color: #909399;
+  }
+
+  .el-icon-folder {
+    color: #e6a23c;
+  }
+
+  .el-icon-document {
+    color: #409EFF;
+  }
+
+  .node-label {
+    white-space: nowrap;
+    overflow: visible; /* 允许文本完整显示 */
+    flex: 1;
+  }
+
+  .node-actions {
+    position: absolute;
+    right: 5px;
+    display: none;
+    gap: 8px;
+    background: inherit;
+  }
+
+  /* 调整滚动条样式 */
+  .custom-tree-node::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .custom-tree-node::-webkit-scrollbar-thumb {
+    background: #c0c4cc;
+    border-radius: 3px;
+  }
+
+  .custom-tree-node::-webkit-scrollbar-track {
+    background: #f5f7fa;
+  }
+
+  /* 确保树节点容器不会限制内容宽度 */
+  :deep(.el-tree-node__content) {
+    min-width: fit-content;
+    padding-right: 0 !important;
+  }
+
+  :deep(.el-tree-node) {
+    min-width: fit-content;
+    white-space: nowrap;
+  }
+
+  .items-section {
+    flex: 1;
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .item-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);  /* 保持两列布局 */
+    gap: 10px;  /* 统一设置按钮之间的间距为 10px */
+    width: 100%;
+    padding: 0 10px;  /* 添加左右内边距 */
+  }
+
+  .item-buttons .el-button {
+    width: 100%;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;  /* 移除按钮默认的外边距 */
+  }
+
+  /* 确保按钮文字居中 */
+  .item-buttons .el-button span {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+  }
+
+  .item-form {
+    width: 100%;
+  }
+
+  .form-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #303133;
+    margin: 0 0 20px 0;
+    text-align: center;
+  }
+
+  .form-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  /* 调整滚动条样式 */
+  .items-section::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .items-section::-webkit-scrollbar-thumb {
+    background: #c0c4cc;
+    border-radius: 3px;
+  }
+
+  .items-section::-webkit-scrollbar-track {
+    background: #f5f7fa;
+  }
+
+  .center-panel {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 32px 0;  /* 保持上下间距 32px */
+    background: #f5f7fa;
+  }
+
+  .editor-container {
+    width: calc(210mm + 180px);  /* A4纸宽度 + 统计信息宽度 + 间距 */
+    height: 100%;
+    background: white;
+    padding: 32px 20mm 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 章节标题区域样式 */
+  .chapter-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;  /* 与编辑区域的间距 */
+    gap: 8px;
+    flex-shrink: 0;  /* 防止标题区域被压缩 */
+  }
+
+  .chapter-prefix,
+  .chapter-middle {
+    font-size: 14px;
+    color: #303133;
+  }
+
+  .chapter-number {
+    width: 60px;
+  }
+
+  .chapter-name {
+    flex: 1;
+  }
+
+  /* 编辑器内容区域 */
+  .editor-content {
+    flex: 1;
+    display: flex;
+    gap: 16px;  /* 输入框和统计信息之间的间距 */
+  }
+
+  /* 内容包装器样式 */
+  .content-wrapper {
+    flex: 1;
+    display: flex;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  /* 文本输入框样式 */
+  .content-textarea {
+    width: 100%;
+  }
+
+  :deep(.content-textarea .el-textarea__inner) {
+    height: 100% !important;
+    border: none;
+    padding: 16px;
+    line-height: 1.6;
+    font-size: 14px;
+    resize: none;
+    background: transparent;
+  }
+
+  /* 修改统计信息显示样式 */
+  .content-stats {
+    width: 140px;
+    flex-shrink: 0;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    padding: 16px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 100%;  /* 确保占满整个高度 */
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  /* 添加保存按钮样式 */
+  .save-content-btn {
+    margin-top: auto;  /* 将按钮推到底部 */
+    width: 100%;      /* 按钮宽度占满 */
+  }
+
+  .logout-btn {
+    padding: 8px 16px;
+    background: #ff3b30;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .logout-btn:hover {
+    background: #ff453a;
+  }
+
+  /* 添加输入框样式 */
+  .el-input {
+    cursor: text !important;
+    user-select: text !important;
+  }
+
+  .el-input.el-input--small .el-input__inner {
+    height: 28px;
+    line-height: 28px;
+  }
+
+  /* 覆盖 element-ui 的默认样式 */
+  :deep(.el-tree-node__content) {
+    user-select: none !important;
+  }
+
+  :deep(.el-tree-node__expand-icon) {
+    user-select: none !important;
+    cursor: pointer !important;
+  }
+
+  /* 调整 tooltip 样式 */
+  :deep(.el-tooltip__popper) {
+    max-width: 300px;
+    word-break: break-all;
+  }
+
+  /* 调整滚动条样式 */
+  .file-tree::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .file-tree::-webkit-scrollbar-thumb {
+    background: #c0c4cc;
+    border-radius: 3px;
+  }
+
+  .file-tree::-webkit-scrollbar-track {
+    background: #f5f7fa;
+  }
+
+  .right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;  /* 移除内边距 */
+  }
+
+  .tabs {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #dcdfe6;
+    background: #fff;
+    padding: 0;
+    margin: 0;
+    user-select: none;  /* 整个选项卡区域都不可选中 */
+  }
+
+  .tab {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 20px;
+    font-size: 14px;
+    color: #606266;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s;
+    margin: 0;
+    border: none;
+    user-select: none;  /* 防止文本被选中 */
+    outline: none;      /* 移除点击时的轮廓 */
+  }
+
+  .tab:hover {
+    color: #409EFF;
+  }
+
+  .tab.active {
+    color: #409EFF;
+    font-weight: 500;
+  }
+
+  .tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #409EFF;
+  }
+
+  .resource-list {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .resource-section {
+    margin-bottom: 10px;
+  }
+
+  .resource-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    padding: 0 16px;
+    background: #f5f7fa;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .resource-header:hover {
+    background: #ecf5ff;
+  }
+
+  .resource-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #303133;
+  }
+
+  .el-icon-arrow-down {
+    font-size: 14px;
+    color: #909399;
+    transition: transform 0.3s ease;
+  }
+
+  .el-icon-arrow-down.expanded {
+    transform: rotate(180deg);
+  }
+
+  .resource-content {
+    background: #fff;
+    border: 1px solid #e4e7ed;
+    border-top: none;
+    margin-bottom: 8px;
+  }
+
+  .resource-search {
+    padding: 16px;
+    border-bottom: 1px solid #e4e7ed;
+  }
+
+  .resource-list-content {
+    padding: 16px;
+  }
+
+  .resource-item {
+    padding: 12px;
+    border: 1px solid #ebeef5;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    background: #fff;
+  }
+
+  .resource-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .resource-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #303133;
+  }
+
+  .resource-info {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #909399;
+  }
+
+  .resource-desc {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #606266;
+  }
+
+  .tab-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    background: #fff;
+  }
+
+  .book-titles {
+    margin-bottom: 6px;  /* 书名输入框列表的底部间距 */
+  }
+
+  .title-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;  /* 每个书名输入框的底部间距 */
+  }
+
+  .title-item:last-child {
+    margin-bottom: 0;  /* 最后一个输入框不需要底部间距 */
+  }
+
+  .book-section .el-textarea {
+    margin-bottom: 16px;  /* 文本域的底部间距 */
+  }
+
+  .cover-uploader {
+    margin-bottom: 16px;  /* 封面上传控件的底部间距 */
+  }
+
+  /* 最后一个区块的最后一个元素不需要底部间距 */
+  .book-section:last-child > *:last-child {
+    margin-bottom: 0;
+  }
+
+  .book-section {
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #606266;
+    margin-bottom: 8px;  /* 标题和控件的间距 */
+    user-select: none;   /* 防止文本选择 */
+    cursor: default;     /* 使用默认光标 */
+  }
+  .section-title.book-title {
+    margin-bottom: 12px;
+  }
+
+  .section-title.required::after {
+    content: '*';
+    color: #f56c6c;
+    margin-left: 4px;
+  }
+
+  .book-intro {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #606266;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;  /* 限制显示两行 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.5;  /* 设置行高 */
+    max-height: 36px;  /* 2行文字的最大高度：12px * 1.5 * 2 = 36px */
+  }
+
+  .book-story {
+    margin-bottom: 20px;
+  }
+
+  .book-info {
+    padding: 20px;
+  }
+
+  .library-content {
+    padding: 20px;
+  }
+
+  .library-book-item {
+    margin-bottom: 10px;
+  }
+
+  .book-main-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #303133;
+  }
+
+  .book-sub-titles {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #909399;
+  }
+
+  .new-book-content {
+    padding: 20px;
+  }
+
+  .form-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  /* 修改输入框和文本域的样式 */
+  .title-item .el-input {
+    user-select: text;  /* 允许文本选择 */
+  }
+
+  .title-item .el-input__inner {
+    user-select: text;  /* 允许文本选择 */
+    cursor: text;       /* 显示文本光标 */
+  }
+
+  .title-item .el-input__wrapper {
+    user-select: none;  /* 防止外层被选中 */
+    cursor: default;    /* 使用默认光标 */
+  }
+
+  .input-wrapper {
+    position: relative;
+    user-select: none;  /* 防止外层被选中 */
+    cursor: default;    /* 使用默认光标 */
+  }
+
+  .input-wrapper .el-textarea {
+    user-select: text;  /* 允许文本选择 */
+  }
+
+  .input-wrapper .el-textarea__inner {
+    user-select: text;  /* 允许文本选择 */
+    cursor: text;       /* 显示文本光标 */
+  }
+
+  /* 确保文字计数器不可选 */
+  .word-count {
+    user-select: none;
+    cursor: default;
+  }
+
+  /* 确保标题不可选 */
+  .section-title {
+    user-select: none;
+    cursor: default;
+  }
+
+  /* 修改表单操作区样式 */
+  .form-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  /* 确保最后一个 book-section 和 form-actions 之间有正确的间距 */
+  .book-section:last-of-type {
+    margin-bottom: 0;
+  }
+
+  /* 修改书库区域样式 */
+  .library-search {
+    padding: 16px;
+    border-bottom: 1px solid #e4e7ed;
+  }
+
+  .library-list {
+    padding: 16px;
+  }
+
+  .library-book-item {
+    padding: 12px;
+    border: 1px solid #ebeef5;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;  /* 添加过渡效果 */
+  }
+
+  .library-book-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .book-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .book-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #303133;
+  }
+
+  .chapter-count {
+    font-size: 12px;
+    color: #909399;
+  }
+
+  .book-intro {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #606266;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;  /* 限制显示两行 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.5;  /* 设置行高 */
+    max-height: 36px;  /* 2行文字的最大高度：12px * 1.5 * 2 = 36px */
+  }
+
+  .title-edit-wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    margin-right: 8px;
+  }
+
+  .title-input {
+    width: 100%;
+  }
+
+  .title-input :deep(.el-input__suffix) {
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .title-confirm,
+  .title-cancel {
+    padding: 0 8px;
+    height: 28px;
+    line-height: 28px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+  }
+
+  .title-confirm {
+    color: #67C23A;
+    margin-right: 4px;
+  }
+
+  /* 调整输入框内部padding，为按钮留出空间 */
+  .title-input :deep(.el-input__inner) {
+    padding-right: 70px;
+  }
+
+  /* 确保suffix容器不会被压缩 */
+  .title-input :deep(.el-input__suffix-inner) {
+    display: flex;
+    align-items: center;
+  }
 </style> 
