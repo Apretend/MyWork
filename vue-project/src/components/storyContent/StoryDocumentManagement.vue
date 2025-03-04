@@ -14,8 +14,8 @@
     display: flex;
     flex-direction: column;
     min-height: 700px;
-    width: 550px;
-    border: 1px solid black;
+    width: 500px;
+    // border: 1px solid black;
 }
 
 </style>

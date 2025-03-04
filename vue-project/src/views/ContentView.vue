@@ -7,8 +7,8 @@
         </div>
     </div>
     <div class="content-body">
-        <StoryManagementTools></StoryManagementTools>
-        <StoryEditTools class="story-edit-tools"></StoryEditTools>
+        <StoryManagementTools @itemClicked="handelItemClick"></StoryManagementTools>
+        <StoryEditTools :itemId="selectedItemId" class="story-edit-tools"></StoryEditTools>
         <StoryDocumentManagement></StoryDocumentManagement>
     </div>
   </div>
@@ -20,6 +20,11 @@ import StoryManagementTools from '../components/storyContent/StoryManagementTool
 import StoryEditTools from '../components/storyContent/StoryEditTools.vue'
 import StoryDocumentManagement from '../components/storyContent/StoryDocumentManagement.vue'
 
+const selectedItemId = ref<number | null>(null)
+
+const handelItemClick = (id: number) => {
+    selectedItemId.value = id
+}
 
 </script>
 
@@ -34,7 +39,7 @@ import StoryDocumentManagement from '../components/storyContent/StoryDocumentMan
         display: flex;
         flex-direction: row;
         height: 100px;
-        border: 1px solid red;
+        // border: 1px solid red;
         .content-title {
             flex: 1;
         }

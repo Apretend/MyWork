@@ -21,6 +21,9 @@
   import {ref, reactive} from 'vue'
   import {useRouter} from 'vue-router'
   import { ElMessage } from 'element-plus'
+  import axios from 'axios'
+
+  const responseUrl = ref('http://127.0.0.1:8081');
 
   const loginFormData = reactive({
     username: '',
@@ -31,14 +34,15 @@
 
   const loginTo = async () => {
     try {
-      if(loginFormData.username == "admin" || loginFormData.password == "admin"){
-        await router.push('/content')
-      }
-      else{
-        ElMessage ({
-          message: '用户名或密码错误',
-          type: 'error',
-        })
+      const response = await axios.post('/api/userInfo/login', loginFormData);
+      console.log(response);
+      
+      if (response.data.code === 0) {
+        localStorage.setItem('userId', response.data.data.id.toString());
+        localStorage.setItem('username', response.data.data.username);
+        await router.push('/content');
+      } else {
+        ElMessage.error(response.data.message);
       }
     } catch (e) {
       console.log("登陆失败：", e);

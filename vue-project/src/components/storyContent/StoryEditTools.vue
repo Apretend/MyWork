@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ itemId }}
     <div class="story-edit-tools">
         <div class="story-edit-tools-left"></div>
         <div class="story-edit-tools-right"></div>
@@ -7,8 +8,11 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
+const props = defineProps<{
+  itemId: number | null;
+}>();
 
 </script>
 
