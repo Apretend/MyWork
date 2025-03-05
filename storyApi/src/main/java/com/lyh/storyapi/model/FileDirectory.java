@@ -14,13 +14,13 @@ import java.time.LocalDateTime;
 public class FileDirectory {
 
     @TableId(value = "directory_id", type = IdType.AUTO)
-    private int directoryId;
+    private Integer directoryId;
 
     @TableField(value = "directory_name")
     private String directoryName;
 
     @TableField(value = "book_id")
-    private int bookId;
+    private Integer bookId;
 
     @TableField(value = "create_time")
     private LocalDateTime createTime;

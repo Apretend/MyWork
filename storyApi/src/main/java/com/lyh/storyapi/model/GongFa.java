@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 public class GongFa {
 
     @TableId(value = "technique_id", type = IdType.AUTO)
-    private int techniqueId;
+    private Integer techniqueId;
 
     @TableField("book_id")
-    private int bookId;
+    private Integer bookId;
 
     @TableField("technique_name")
     private String techniqueName;

@@ -2,19 +2,28 @@ package com.lyh.storyapi.dto;
 
 public class AddFileRequest {
 
-    private int bookId;
+    private Integer bookId;
+    private String bookName;
     private Integer directoryId;
     private String directoryName;
     private Integer documentId;
     private String documentName;
     private String documentContent;
 
-    public int getBookId() {
+    public Integer getBookId() {
         return bookId;
     }
 
-    public void setBookId(int bookId) {
+    public void setBookId(Integer bookId) {
         this.bookId = bookId;
+    }
+
+    public String getBookName() {
+        return bookName;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 
     public Integer getDirectoryId() {

@@ -14,7 +14,7 @@ import java.util.Date;
 public class Book {
 
     @TableId(value = "book_id", type = IdType.AUTO)
-    private int bookId;
+    private Integer bookId;
 
     @TableField("book_name")
     private String bookName;
@@ -38,13 +38,13 @@ public class Book {
     private String coverLink;
 
     @TableField("platform_id")
-    private int platformId;
+    private Integer platformId;
 
     @TableField("is_published")
-    private int isPublished = 0;
+    private Integer isPublished = 0;
 
     @TableField("user_id")
-    private int userId;
+    private Integer userId;
 
     @TableField(value = "book_content_description")
     private String bookContentDescription;

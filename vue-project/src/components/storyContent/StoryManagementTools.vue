@@ -14,8 +14,7 @@
         <div class="book-name">{{ book.name }}</div>
         <div class="book-button">
           <el-button v-if="book.name" type="primary" link @click="reNameBook()">重命名</el-button>
-          <el-button v-if="book.name" type="primary" link @click="appendBook()">添加</el-button>
-          <el-button v-if="book.name" type="danger" link @click="removeBook()">删除</el-button>
+          <el-button v-if="book.name" type="primary" link @click="appendDirectory()">添加文件夹</el-button>
         </div>
       </div>
       <div class="book-file">
@@ -26,6 +25,7 @@
         show-checkbox
         node-key="id"
         :expand-on-click-node="true"
+        class="el-tree-node"
         >
           <template #default="{ node, data }">
             <div class="custom-tree-node" @click="handleNodeClickArea(data)">
@@ -48,11 +48,25 @@
       <el-button type="primary" @click="confirmAppend">确定</el-button>
     </template>
   </el-dialog>
-  <el-dialog v-model="dialogFileReNameVisible" title="添加节点">
+  <el-dialog v-model="dialogDirectoryVisible" title="添加目录">
+    <el-input v-model="newDirectory" placeholder="请输入内容"></el-input>
+    <template #footer>
+      <el-button type="danger" @click="dialogDirectoryVisible = false">取消</el-button>
+      <el-button type="primary" @click="confirmDirectoryAppend">确定</el-button>
+    </template>
+  </el-dialog>
+  <el-dialog v-model="dialogFileReNameVisible" title="重命名">
     <el-input v-model="newFileName" placeholder="请输入内容"></el-input>
     <template #footer>
       <el-button type="danger" @click="dialogFileReNameVisible = false">取消</el-button>
       <el-button type="primary" @click="confirmReName">确定</el-button>
+    </template>
+  </el-dialog>
+  <el-dialog v-model="dialogReNameBookVisible" title="书名重命名">
+    <el-input v-model="newBookName" placeholder="请输入内容"></el-input>
+    <template #footer>
+      <el-button type="danger" @click="dialogReNameBookVisible = false">取消</el-button>
+      <el-button type="primary" @click="confirmReNameBook">确定</el-button>
     </template>
   </el-dialog>
 </template>
@@ -92,13 +106,17 @@ const state = ref("");   // 搜索框的参数
 const timeout = ref(null);
 const book = reactive({
   id: 0,
-  name: "1111111111111111111111111111111111111111111",
+  name: "",
 })
 const dialogVisible = ref(false);
 const dialogFileReNameVisible = ref(false);
+const dialogDirectoryVisible = ref(false);
+const dialogReNameBookVisible = ref(false);
 const newNodeLabel = ref("");
 const newFileName = ref("");
+const newBookName = ref("");
 const targetNode = ref(null);
+const newDirectory = ref(null);
 
 interface Tree {
   id: number;
@@ -249,6 +267,35 @@ const confirmAppend = async () => {
   
 }
 
+const appendDirectory = () => {
+  newDirectory.value = "";
+  dialogDirectoryVisible.value = true;
+}
+const confirmDirectoryAppend = async () => {
+  try {
+    if (newDirectory.value == ""){
+      ElMessage.warning("请输入内容");
+      return;
+    }
+    const nodeData = {
+      bookId: book.id,
+      directoryName: newDirectory.value,
+    }
+    console.log(nodeData);
+    
+    const response = await axios.post(`/api/fileManagementTools/addDirectory`, nodeData);
+    if (response.data.code === 0) {
+      getTreeData();
+      ElMessage.success("添加成功");
+      dialogDirectoryVisible.value = false;
+    } else {
+      ElMessage.error("添加失败");
+    }
+  } catch (error) {
+    console.log("请求失败：", error);
+  }
+}
+
 const reName = (data) => {
   targetNode.value = "";
   newFileName.value = "";
@@ -270,6 +317,34 @@ const confirmReName = async () => {
       getTreeData();
       ElMessage.success("修改成功");
       dialogFileReNameVisible.value = false;
+    } else {
+      ElMessage.error("修改失败");
+    }
+  } catch (error) {
+    console.log("请求失败：", error);
+  }
+}
+
+const reNameBook = () => {
+  newBookName.value = book.name;
+  dialogReNameBookVisible.value = true;
+}
+const confirmReNameBook = async () => {
+  try {
+    if (newBookName.value == ""){
+      ElMessage.warning("请输入内容");
+      return;
+    }
+    const nodeData = {
+      bookId: book.id,
+      bookName: newBookName.value,
+    }
+    const response = await axios.post(`/api/fileManagementTools/updateBook`,nodeData);
+    if (response.data.code === 0) {
+      getTreeData();
+      ElMessage.success("修改成功");
+      book.name = newBookName.value;
+      dialogReNameBookVisible.value = false;
     } else {
       ElMessage.error("修改失败");
     }
@@ -313,13 +388,20 @@ const remove = async (data) => {
     width: 500px;
     border-bottom: 1px solid #E0E0E0;
     min-height: 700px;
+    padding: 10px 25px;
+    background-color: #E0E0E0;
+
+    .file-management {
+      margin-bottom: 16px;
+    }
 
     .file-tree {
       flex: 1;
-      width: 500px;
+      width: 450px;
       overflow-x: scroll;
       overflow-y: scroll;
-      border-right: 1px solid #E0E0E0;
+      display: flex;
+      flex-direction: column;
       // border: 1px solid purple;
       
       .book-title {
@@ -331,6 +413,8 @@ const remove = async (data) => {
         align-items: center;
         justify-content: space-between;
         white-space: nowrap;
+        background-color: white;
+        
 
 
         .book-name {
@@ -342,6 +426,14 @@ const remove = async (data) => {
           white-space: nowrap;
         }
 
+      }
+
+      .book-file {
+        flex: 1;
+
+        .el-tree-node {
+          height: 100%;
+        }
       }
 
       .custom-tree-node {

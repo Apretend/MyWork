@@ -7,8 +7,8 @@
         </div>
     </div>
     <div class="content-body">
-        <StoryManagementTools @itemClicked="handelItemClick"></StoryManagementTools>
-        <StoryEditTools :itemId="selectedItemId" class="story-edit-tools"></StoryEditTools>
+        <StoryManagementTools class="content-story-management-tools" @itemClicked="handelItemClick"></StoryManagementTools>
+        <StoryEditTools :itemId="selectedItemId" class="content-story-edit-tools"></StoryEditTools>
         <StoryDocumentManagement></StoryDocumentManagement>
     </div>
   </div>
@@ -56,8 +56,7 @@ const handelItemClick = (id: number) => {
         display: flex;
         flex-direction: row;
 
-
-        .story-edit-tools {
+        .content-story-edit-tools {
             flex-grow: 1;
         }
     }

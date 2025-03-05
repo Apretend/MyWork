@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 public class Elixir {
 
     @TableId(value = "elixir_id", type = IdType.AUTO)
-    private int elixirId;
+    private Integer elixirId;
 
     @TableField("book_id")
-    private int bookId;
+    private Integer bookId;
 
     @TableField("elixir_name")
     private String elixirName;

@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 public class CharacterResource {
 
     @TableId(value = "character_id")
-    private int characterId;
+    private Integer characterId;
 
     @TableField("book_id")
-    private int bookId;
+    private Integer bookId;
 
     @TableField("name")
     private String name;
@@ -24,7 +24,7 @@ public class CharacterResource {
     private String gender;
 
     @TableField("age")
-    private int age;
+    private Integer age;
 
     @TableField("personality")
     private String personality;
@@ -36,7 +36,7 @@ public class CharacterResource {
     private String strength;
 
     @TableField("is_alive")
-    private int isAlive;
+    private Integer isAlive;
 
     @TableField("create_time")
     private LocalDateTime createTime;

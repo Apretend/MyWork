@@ -13,13 +13,13 @@ import java.time.LocalDateTime;
 public class Resource {
 
     @TableId(value = "resource_id", type = IdType.AUTO)
-    private int resourceId;
+    private Integer resourceId;
 
     @TableField("resource_name")
     private String resourceName;
 
     @TableField("is_global")
-    private int isGlobal;
+    private Integer isGlobal;
 
     @TableField("create_time")
     private LocalDateTime createTime;

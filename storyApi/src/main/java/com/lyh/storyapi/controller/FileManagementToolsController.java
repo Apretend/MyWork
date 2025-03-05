@@ -69,6 +69,27 @@ public class FileManagementToolsController {
     }
 
     // 新增目录
+    @PostMapping("/addDirectory")
+    public ResponseEntity<?> addDirectory(@RequestBody AddFileRequest addFileRequest) {
+        try {
+            Book book = bookService.getBookById(addFileRequest.getBookId());
+            if (book != null) {
+                FileDirectory fileDirectory = new FileDirectory();
+                fileDirectory.setCreateTime(LocalDateTime.now());
+                fileDirectory.setUpdateTime(LocalDateTime.now());
+                fileDirectory.setBookId(addFileRequest.getBookId());
+                fileDirectory.setDirectoryName(addFileRequest.getDirectoryName());
+                fileDirectoryService.addFileDirectory(fileDirectory);
+                return ResponseEntity.status(200).body(new ApiResponse<>(0, "Success", null));
+            } else {
+                return ResponseEntity.status(200).body(new ApiResponse<>(-1, "Error", "Book not found"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ApiResponse<>(-1, "Error", e.getMessage()));
+        }
+    }
+
+    // 新增文档
     @PostMapping("/addDoucment")
     public ResponseEntity<?> addFile(@RequestBody AddFileRequest addFileRequest) {
         try {
@@ -90,6 +111,24 @@ public class FileManagementToolsController {
         }
     }
 
+    // 重命名书
+    @PostMapping("/updateBook")
+    public ResponseEntity<?> updateBook(@RequestBody AddFileRequest addFileRequest) {
+        try {
+            Book book = bookService.getBookById(addFileRequest.getBookId());
+            if (book != null) {
+                book.setBookName(addFileRequest.getBookName());
+                book.setUpdateTime(LocalDateTime.now());
+                bookService.updateBook(book);
+                return ResponseEntity.status(200).body(new ApiResponse<>(0, "Success",book));
+            } else {
+                return ResponseEntity.status(200).body(new ApiResponse<>(-1, "Error", "Book not found"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ApiResponse<>(-1, "Error", e.getMessage()));
+        }
+    }
+    // 更新文档或者重命名目录
     @PostMapping("/updateFile")
     public ResponseEntity<?> updateFile(@RequestBody AddFileRequest addFileRequest) {
         try {

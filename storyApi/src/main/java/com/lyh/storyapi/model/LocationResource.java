@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 public class LocationResource {
 
     @TableId(value = "location_id", type = IdType.AUTO)
-    private int locationId;
+    private Integer locationId;
 
     @TableField("book_id")
-    private int bookId;
+    private Integer bookId;
 
     @TableField("location_name")
     private String locationName;

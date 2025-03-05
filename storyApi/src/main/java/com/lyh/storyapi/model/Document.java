@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class Document {
 
     @TableId(value = "document_id", type = IdType.AUTO)
-    private int documentId;
+    private Integer documentId;
 
     @TableField("document_name")
     private String documentName;

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class UserInfo {
 
     @TableId(value = "id", type = IdType.AUTO)
-    private int id;
+    private Integer id;
 
     @TableField(value = "user_name")
     private String username;

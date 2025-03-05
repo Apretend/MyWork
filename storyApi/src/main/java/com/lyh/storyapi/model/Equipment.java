@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 public class Equipment {
 
     @TableId(value = "equipment_id", type = IdType.AUTO)
-    private int equipmentId;
+    private Integer equipmentId;
 
     @TableField("book_id")
-    private int bookId;
+    private Integer bookId;
 
     @TableField("equipment_name")
     private String equipmentName;

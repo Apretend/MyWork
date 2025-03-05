@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class Weapon {
 
     @TableId(value = "weapon_id", type = IdType.AUTO)
-    private int weaponId;   // 武器ID
+    private Integer weaponId;   // 武器ID
 
     @TableField("book_id")
     private Integer bookId;  // 书ID
