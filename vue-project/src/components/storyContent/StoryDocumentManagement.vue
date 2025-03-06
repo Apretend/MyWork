@@ -57,6 +57,7 @@ import { Plus, ArrowDown, Notebook, Collection, SetUp } from '@element-plus/icon
     flex-direction: column;
     min-height: 700px;
     width: 500px;
+    padding: 10px 25px;
     // border: 1px solid black;
 
     .document-tabs {

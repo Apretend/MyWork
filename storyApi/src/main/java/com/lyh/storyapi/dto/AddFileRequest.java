@@ -9,6 +9,15 @@ public class AddFileRequest {
     private Integer documentId;
     private String documentName;
     private String documentContent;
+    private String documentTitle;
+
+    public String getDocumentTitle() {
+        return documentTitle;
+    }
+
+    public void setDocumentTitle(String documentTitle) {
+        this.documentTitle = documentTitle;
+    }
 
     public Integer getBookId() {
         return bookId;

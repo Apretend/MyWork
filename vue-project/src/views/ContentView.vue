@@ -34,6 +34,7 @@ const handelItemClick = (id: number) => {
     width: 100vw;
     display: flex;
     flex-direction: column;
+    background-color: #e0e0e0;
 
     .content-head {
         display: flex;

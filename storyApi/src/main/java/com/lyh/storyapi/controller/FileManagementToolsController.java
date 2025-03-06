@@ -101,6 +101,7 @@ public class FileManagementToolsController {
                 document.setDocumentContent(addFileRequest.getDocumentContent());
                 document.setDocumentName(addFileRequest.getDocumentName());
                 document.setDirectoryId(addFileRequest.getDirectoryId());
+                document.setDocumentTitle(addFileRequest.getDocumentTitle());
                 documentService.createDocument(document);
                 return ResponseEntity.status(200).body(new ApiResponse<>(0, "Success", null));
             } else {
@@ -137,6 +138,7 @@ public class FileManagementToolsController {
                 if (document != null) {
                     document.setDocumentContent(addFileRequest.getDocumentContent());
                     document.setDocumentName(addFileRequest.getDocumentName());
+                    document.setDocumentTitle(addFileRequest.getDocumentTitle());
                     document.setUpdateTime(LocalDateTime.now());
                     documentService.updateDocument(document);
                     return ResponseEntity.status(200).body(new ApiResponse<>(0, "Success", null));
@@ -159,6 +161,7 @@ public class FileManagementToolsController {
         }
     }
 
+    // 删除文件
     @PostMapping("/deleteFile")
     public ResponseEntity<?> deleteFile(@RequestBody AddFileRequest addFileRequest) {
         try {

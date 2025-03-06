@@ -42,7 +42,7 @@
     </div>
   </div>
   <el-dialog v-model="dialogVisible" title="添加节点">
-    <el-input v-model="newNodeLabel" placeholder="请输入内容"></el-input>
+    <el-input v-model="newNodeLabel" placeholder="请输入内容，注：此处定义章节数并非章节标题"></el-input>
     <template #footer>
       <el-button type="danger" @click="dialogVisible = false">取消</el-button>
       <el-button type="primary" @click="confirmAppend">确定</el-button>
@@ -385,11 +385,9 @@ const remove = async (data) => {
 .story-management-tools {
     display: flex;
     flex-direction: column;
-    width: 500px;
-    border-bottom: 1px solid #E0E0E0;
+    width: 400px;
     min-height: 700px;
     padding: 10px 25px;
-    background-color: #E0E0E0;
 
     .file-management {
       margin-bottom: 16px;
@@ -397,7 +395,7 @@ const remove = async (data) => {
 
     .file-tree {
       flex: 1;
-      width: 450px;
+      width: 100%;
       overflow-x: scroll;
       overflow-y: scroll;
       display: flex;

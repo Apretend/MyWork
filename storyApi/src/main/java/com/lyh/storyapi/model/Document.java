@@ -29,4 +29,7 @@ public class Document {
 
     @TableField("update_time")
     private LocalDateTime updateTime;
+
+    @TableField("document_title")
+    private String documentTitle;
 }
