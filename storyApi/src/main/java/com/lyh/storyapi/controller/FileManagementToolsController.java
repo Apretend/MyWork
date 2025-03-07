@@ -52,6 +52,7 @@ public class FileManagementToolsController {
                     Map<String, Object> fileNode = new HashMap<>();
                     fileNode.put("id", document.getDocumentId());
                     fileNode.put("name", document.getDocumentName());
+                    fileNode.put("title", document.getDocumentTitle());
                     fileNode.put("children", new ArrayList<>());
                     fileNode.put("type", "file");
                     children.add(fileNode);

@@ -46,8 +46,9 @@
 </template>
 
 <script setup lang="ts">
+import { ref, reactive, onMounted, watch } from 'vue';
 import { Plus, ArrowDown, Notebook, Collection, SetUp } from '@element-plus/icons-vue'
-
+const userId = ref(localStorage.getItem("userId"));
 
 </script>
 

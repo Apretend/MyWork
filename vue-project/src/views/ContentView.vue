@@ -7,8 +7,8 @@
         </div>
     </div>
     <div class="content-body">
-        <StoryManagementTools class="content-story-management-tools" @itemClicked="handelItemClick"></StoryManagementTools>
-        <StoryEditTools :itemId="selectedItemId" class="content-story-edit-tools"></StoryEditTools>
+        <StoryManagementTools :updateDocumentSuccessed="updateDocumentSuccessed" class="content-story-management-tools" @itemClicked="handelItemClick"></StoryManagementTools>
+        <StoryEditTools :itemId="selectedItemId" @updateDocumentSuccessed="handleRequestSuccessed" class="content-story-edit-tools"></StoryEditTools>
         <StoryDocumentManagement></StoryDocumentManagement>
     </div>
   </div>
@@ -21,6 +21,13 @@ import StoryEditTools from '../components/storyContent/StoryEditTools.vue'
 import StoryDocumentManagement from '../components/storyContent/StoryDocumentManagement.vue'
 
 const selectedItemId = ref<number | null>(null)
+const updateDocumentSuccessed = ref(0);
+
+function handleRequestSuccessed() {
+    updateDocumentSuccessed.value = updateDocumentSuccessed.value + 1;
+}
+
+
 
 const handelItemClick = (id: number) => {
     selectedItemId.value = id

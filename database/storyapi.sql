@@ -11,7 +11,7 @@
  Target Server Version : 80041 (8.0.41)
  File Encoding         : 65001
 
- Date: 06/03/2025 18:25:28
+ Date: 07/03/2025 18:19:21
 */
 
 SET NAMES utf8mb4;
@@ -86,7 +86,7 @@ CREATE TABLE `character_resource`  (
   PRIMARY KEY (`character_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `character_resource_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '人物资源表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '人物资源表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of character_resource
@@ -107,7 +107,7 @@ CREATE TABLE `document`  (
   PRIMARY KEY (`document_id`) USING BTREE,
   INDEX `directory_id`(`directory_id` ASC) USING BTREE,
   CONSTRAINT `document_ibfk_1` FOREIGN KEY (`directory_id`) REFERENCES `file_directory` (`directory_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文档表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文档表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of document
@@ -116,6 +116,8 @@ INSERT INTO `document` VALUES (1, '压下亲方两', 1, 'enim reprehenderit cons
 INSERT INTO `document` VALUES (2, '1231231方两', 1, 'enim rep123123123123123rehenderit consequat', '2025-03-04 15:44:19', '2025-03-04 15:44:19', NULL);
 INSERT INTO `document` VALUES (3, '123', 2, 'enim rep123123123123123rehenderit consequat', '2025-03-04 15:44:29', '2025-03-04 17:49:32', NULL);
 INSERT INTO `document` VALUES (8, '来喽', 4, '', '2025-03-05 11:01:52', '2025-03-05 11:01:52', NULL);
+INSERT INTO `document` VALUES (9, '1', 5, '', '2025-03-07 15:42:34', '2025-03-07 15:42:34', '');
+INSERT INTO `document` VALUES (10, '第1章', 6, '嘿嘿嘿嘿啊啊啊', '2025-03-07 17:53:44', '2025-03-07 18:13:28', '哈拉拉');
 
 -- ----------------------------
 -- Table structure for elixir
@@ -135,7 +137,7 @@ CREATE TABLE `elixir`  (
   PRIMARY KEY (`elixir_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `elixir_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '丹药表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '丹药表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of elixir
@@ -159,7 +161,7 @@ CREATE TABLE `equipment`  (
   PRIMARY KEY (`equipment_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `equipment_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '装备表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '装备表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of equipment
@@ -178,7 +180,7 @@ CREATE TABLE `file_directory`  (
   PRIMARY KEY (`directory_id`) USING BTREE,
   INDEX `book_id`(`book_id` ASC) USING BTREE,
   CONSTRAINT `file_directory_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book_details` (`book_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文件目录表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文件目录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of file_directory
@@ -186,6 +188,8 @@ CREATE TABLE `file_directory`  (
 INSERT INTO `file_directory` VALUES (1, '切程规', 12, '2025-03-04 15:43:09', '2025-03-04 15:43:09');
 INSERT INTO `file_directory` VALUES (2, '起飞楼', 12, '2025-03-04 15:43:33', '2025-03-04 17:49:28');
 INSERT INTO `file_directory` VALUES (4, '我我我我我我33hh哈哈哈啊', 12, '2025-03-05 11:01:22', '2025-03-05 11:02:02');
+INSERT INTO `file_directory` VALUES (5, '哈哈哈', 12, '2025-03-07 15:42:28', '2025-03-07 15:42:28');
+INSERT INTO `file_directory` VALUES (6, '正文', 12, '2025-03-07 17:53:39', '2025-03-07 17:53:39');
 
 -- ----------------------------
 -- Table structure for gong_fa

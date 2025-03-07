@@ -29,8 +29,8 @@
         >
           <template #default="{ node, data }">
             <div class="custom-tree-node" @click="handleNodeClickArea(data)">
-              <span class="custom-tree-node-label">{{ node.label }}</span>
-              <div>
+              <span style="width:150px;white-space: nowrap;overflow: hidden;text-overflow:ellipsis" class="custom-tree-node-label">{{ data.type === 'directory' ? node.label : node.label + (data.title === null ? "" : "：" + data.title)}}</span>
+              <div style="flex:1">
                 <el-button type="primary" link @click.stop="reName(data)">重命名</el-button>
                 <el-button  v-if="data.type == 'directory'" type="primary" link @click.stop="append(data)">添加</el-button>
                 <el-button  type="danger" link @click.stop="remove(node, data)">删除</el-button>
@@ -42,10 +42,33 @@
     </div>
   </div>
   <el-dialog v-model="dialogVisible" title="添加节点">
-    <el-input v-model="newNodeLabel" placeholder="请输入内容，注：此处定义章节数并非章节标题"></el-input>
+    <div style="display: flex;flex-direction: row;">
+      <div class="custom-tree-node-select" style="margin-right: 10px;">
+      <el-select
+        v-model="createFileType"
+        placeholder="文件类型"
+        style="width: 100px"
+      >
+      <el-option
+        v-for="item in createFileTypeOptions"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      ></el-option>
+    </el-select>
+    </div>
+    <div class="custom-tree-node-input" v-if="createFileType == 1" style="width: 100%;">
+      <el-input v-model="newNodeLabel" placeholder="请输入内容"></el-input>
+    </div>
+    <div class="custom-tree-node-input" v-else>
+      <el-input v-model="newNodeLabel" style="max-width: 200px;" type="number">
+        <template #prepend>第</template>
+        <template #append>章</template></el-input>
+    </div>
+    </div>
     <template #footer>
       <el-button type="danger" @click="dialogVisible = false">取消</el-button>
-      <el-button type="primary" @click="confirmAppend">确定</el-button>
+      <el-button type="primary" @click="confirmAppend(createFileType)">确定</el-button>
     </template>
   </el-dialog>
   <el-dialog v-model="dialogDirectoryVisible" title="添加目录">
@@ -78,12 +101,16 @@ import { ca, el, tr } from 'element-plus/es/locale';
 import { Interface } from 'readline';
 import { json } from 'stream/consumers';
 import { ref, onMounted, reactive } from 'vue';
-import { defineEmits } from 'vue';
+import { defineEmits, watch } from 'vue';
 
 const emit = defineEmits<{
   (e: 'itemClicked', id: number): void;
 }>();
 
+const props = defineProps(['updateDocumentSuccessed']);
+watch(() => props.updateDocumentSuccessed, () => {
+  getTreeData();
+})
 const handleNodeClickArea = (data) => {
   if (data.type == "file") {
     sendItemId(data.id);  
@@ -100,6 +127,20 @@ onMounted(() => {
   console.log("storyManagementTools mounted");
   getAllBookInfo();
 })
+
+const userId = ref(localStorage.getItem("userId"));
+
+const createFileType = ref("2");
+const createFileTypeOptions = [
+  {
+    value: '1',
+    label: '文件'
+  },
+  {
+    value: '2',
+    label: '正文'
+  }
+]
 
 const storys = ref([{}]);   // 获取的只是名字和ID
 const state = ref("");   // 搜索框的参数
@@ -240,7 +281,7 @@ const append = (data) => {
   targetNode.value = data;
   dialogVisible.value = true;
 }
-const confirmAppend = async () => {
+const confirmAppend = async (createFileType) => {
   if (newNodeLabel.value == ""){
     ElMessage.warning("请输入内容");
     return;
@@ -248,9 +289,10 @@ const confirmAppend = async () => {
   try {
     const nodeData = {
       directoryId: targetNode.value.id,
-      documentName: newNodeLabel.value,
+      documentName: createFileType.value === '1' ? newNodeLabel.value : "第" + newNodeLabel.value + "章：",
       bookId: book.id,
       documentContent: "",
+      documentTitle: "",
     }
     const response = await axios.post(`/api/fileManagementTools/addDoucment`, nodeData)
     if (response.data.code === 0) {

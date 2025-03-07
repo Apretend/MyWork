@@ -22,3 +22,5 @@ app.use(router)
 app.use(ElementPlus, { locale: zhCn})
 
 app.mount('#app')
+
+// node版本 18.12.0   nvm 控制
