@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,6 +24,8 @@ public class BookController {
     private BookService bookService;
     @Autowired
     private BookMapper bookMapper;
+
+    private static final String UPLOAD_DIR = "D:\\upload";
 
     @GetMapping("/getBooks")
     public ResponseEntity<?> getBooks() {
@@ -76,6 +80,26 @@ public class BookController {
        } catch (Exception e) {
            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(-1, "小说创建失败",e.getMessage()));
        }
+    }
+
+    // 上传图片
+    @PostMapping("/uploadImage")
+    public ResponseEntity<?> uploadImage(@RequestParam("file")MultipartFile file) {
+        try {
+            if(file.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(-11,"文件为空",null));
+            }
+            // 文件名
+            String fileName = file.getOriginalFilename();
+            // 构建目标文件路径
+            String filePath = UPLOAD_DIR + fileName;
+            File targetFile = new File(filePath);
+            targetFile.getParentFile().mkdirs();
+            file.transferTo(targetFile);
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(0,"上传成功",filePath));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(-1,"上传失败",e.getMessage()));
+        }
     }
 
     @PostMapping("/updateBook")

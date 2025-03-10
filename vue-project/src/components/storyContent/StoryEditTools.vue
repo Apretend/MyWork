@@ -23,7 +23,7 @@
             placeholder="正文内容"
             show-word-limit
             type="textarea"
-            :rows="30"
+            :rows="32"
           />
         </div>
       </div>
@@ -109,7 +109,7 @@ const save = async () => {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 750px;
+    height: 800px;
     overflow: hidden;
     padding: 10px 0px;
 

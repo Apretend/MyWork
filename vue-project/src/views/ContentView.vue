@@ -7,9 +7,9 @@
         </div>
     </div>
     <div class="content-body">
-        <StoryManagementTools :updateDocumentSuccessed="updateDocumentSuccessed" class="content-story-management-tools" @itemClicked="handelItemClick"></StoryManagementTools>
+        <StoryManagementTools :updateDocumentSuccessed="updateDocumentSuccessed" class="content-story-management-tools" @itemClicked="handelItemClick" @bookClicked="handleBookClick"></StoryManagementTools>
         <StoryEditTools :itemId="selectedItemId" @updateDocumentSuccessed="handleRequestSuccessed" class="content-story-edit-tools"></StoryEditTools>
-        <StoryDocumentManagement></StoryDocumentManagement>
+        <StoryDocumentManagement :bookId="selectBookId"></StoryDocumentManagement>
     </div>
   </div>
 </template>
@@ -22,16 +22,18 @@ import StoryDocumentManagement from '../components/storyContent/StoryDocumentMan
 
 const selectedItemId = ref<number | null>(null)
 const updateDocumentSuccessed = ref(0);
+const selectBookId = ref<number | null>(null)
 
 function handleRequestSuccessed() {
     updateDocumentSuccessed.value = updateDocumentSuccessed.value + 1;
 }
-
-
-
 const handelItemClick = (id: number) => {
-    selectedItemId.value = id
+    selectedItemId.value = id;
 }
+const handleBookClick = (id: number) => {
+    selectBookId.value = id;
+}
+
 
 </script>
 

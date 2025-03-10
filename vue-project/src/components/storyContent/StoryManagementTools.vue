@@ -105,6 +105,7 @@ import { defineEmits, watch } from 'vue';
 
 const emit = defineEmits<{
   (e: 'itemClicked', id: number): void;
+  (e: 'bookClicked', id: number): void;
 }>();
 
 const props = defineProps(['updateDocumentSuccessed']);
@@ -258,6 +259,7 @@ const handleSelect = async (item) => {
   book.name = item.value;
   state.value = "";
   getTreeData();
+  emit('bookClicked', book.id);
 }
 
 const handleNodeClick = async (data) => {
@@ -428,7 +430,7 @@ const remove = async (data) => {
     display: flex;
     flex-direction: column;
     width: 400px;
-    min-height: 700px;
+    height: 800px;
     padding: 10px 25px;
 
     .file-management {
