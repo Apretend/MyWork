@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://cvk31iri3lxai"]
+
+[ext_resource type="PackedScene" uid="uid://bsq5v6hwnqo67" path="res://scenes/player/player.tscn" id="1_pw63i"]
+[ext_resource type="Script" uid="uid://dwjnjssbmokq7" path="res://scenes/player/player.gd" id="2_7ykc4"]
+
+[node name="MainScene" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_pw63i")]
+script = ExtResource("2_7ykc4")
+
+[node name="Sprite" type="Sprite2D" parent="Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
