@@ -1,0 +1,48 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="ignoredPackages">
+        <list>
+          <option value="aiofiles" />
+          <option value="aiohappyeyeballs" />
+          <option value="aiohttp" />
+          <option value="aiosignal" />
+          <option value="APScheduler" />
+          <option value="attrs" />
+          <option value="blinker" />
+          <option value="certifi" />
+          <option value="cffi" />
+          <option value="charset-normalizer" />
+          <option value="click" />
+          <option value="colorama" />
+          <option value="Flask" />
+          <option value="frozenlist" />
+          <option value="gevent" />
+          <option value="greenlet" />
+          <option value="idna" />
+          <option value="itsdangerous" />
+          <option value="Jinja2" />
+          <option value="MarkupSafe" />
+          <option value="multidict" />
+          <option value="playwright" />
+          <option value="propcache" />
+          <option value="pycparser" />
+          <option value="pyee" />
+          <option value="pytz" />
+          <option value="requests" />
+          <option value="typing_extensions" />
+          <option value="tzdata" />
+          <option value="tzlocal" />
+          <option value="urllib3" />
+          <option value="Werkzeug" />
+          <option value="yarl" />
+          <option value="zope.event" />
+          <option value="zope.interface" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="Stylelint" enabled="true" level="ERROR" enabled_by_default="true" />
+  </profile>
+</component>
